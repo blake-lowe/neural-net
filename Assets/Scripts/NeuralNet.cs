@@ -9,7 +9,7 @@ public class NeuralNet
     int hiddenLayerSize;    //the number of nodes in each hidden layer //DOES NOT SUPPORT VARYING HIDDEN LAYER SIZES//
     Layer[] hiddenLayers;
     
-    NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int hiddenLayerSize)
+    void NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int hiddenLayerSize)
     {
         //TODO
     }
@@ -19,7 +19,7 @@ public class NeuralNet
         //TODO
     }
 
-    backpropagate(float error)
+    backpropagate(double error)
     {
         //TODO
     }
