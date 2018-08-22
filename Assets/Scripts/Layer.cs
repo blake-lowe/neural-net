@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Layer
 {
@@ -12,12 +11,12 @@ public class Layer
 
     Layer(int numNodesPrevious, int numNodes)
     {
-        //to be implemented
+        //TODO
     }
 
     float[] calculateValues(float[] previousValues)
     {
-        //to be implemented
+        //TODO
     }
     
     float[] getValues()
