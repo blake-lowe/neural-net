@@ -9,7 +9,7 @@ public class Layer
     double[] biases;             //one bias for each node in this layer
     double[] values;             //values used for feed-forward calculation
 
-    Layer(int numNodesPrevious, int numNodes)
+    public Layer(int numNodesPrevious, int numNodes)
     {
         weights = new double[numNodes, numNodesPrevious];
         biases = new double[numNodes];
@@ -19,6 +19,7 @@ public class Layer
     double[] calculateValues(double[] previousValues)
     {
         //TODO
+        return new double[];
     }
 
     void setWeights(double[,] weights)
