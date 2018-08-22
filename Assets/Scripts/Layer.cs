@@ -16,23 +16,23 @@ public class Layer
         values = new double[numNodes];
     }
 
-    double[] calculateValues(double[] previousValues)
+    double[] CalculateValues(double[] previousValues)
     {
         //TODO
-        return new double[];
+        return new double[1];
     }
 
-    void setWeights(double[,] weights)
+    void SetWeights(double[,] weights)
     {
         this.weights = weights;
     }
     
-    double[] getValues()
+    double[] GetValues()
     {
         return values;
     }
 
-    void setValues(double[] values)
+    void SetValues(double[] values)
     {
         this.values = values;
     }
@@ -40,8 +40,8 @@ public class Layer
 
 public static class ActivationFunctions
 {
-    public static double logistic(double x)
+    public static double Logistic(double x)
     {
-        return 1.0 / (1.0 + Math.Exp(-x));
+        return 1.0 / (1.0 + System.Math.Exp(-x));
     }
 }

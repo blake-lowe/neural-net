@@ -14,12 +14,12 @@ public class NeuralNet
         //TODO
     }
 
-    Layer feedForward(Layer input)
+    void FeedForward(Layer input)
     {
         //TODO
     }
 
-    void backpropagate(double error)
+    void Backpropagate(double error)
     {
         //TODO
     }
