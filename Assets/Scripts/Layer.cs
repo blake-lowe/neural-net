@@ -1,19 +1,31 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+
 
 public class Layer
 {
     readonly int numNodesPrevious;       //number of nodes in the previous layer
     readonly int numNodes;               //number of nodes in this layer
-    double[,] weights;           //the weights connecting the previous layer to this layer
-    double[] biases;             //one bias for each node in this layer
-    double[] values;             //values used for feed-forward calculation
+    private Random rand;
+    double[,] weights;                  //the weights connecting the previous layer to this layer
+    double[] biases;                    //one bias for each node in this layer
+    double[] values;                    //values used for feed-forward calculation
 
     public Layer(int numNodesPrevious, int numNodes)
     {
         weights = new double[numNodes, numNodesPrevious];
         biases = new double[numNodes];
         values = new double[numNodes];
+        rand = new Random();
+    }
+
+    public Layer(int numNodesPrevious, int numNodes, Random rand)
+    {
+        weights = new double[numNodes, numNodesPrevious];
+        biases = new double[numNodes];
+        values = new double[numNodes];
+        this.rand = rand;
     }
 
     public double[,] Weights
@@ -55,9 +67,35 @@ public class Layer
         }
     }
 
+    void RandomizeWeights()             //randomizes biases and weights
+    {
+        for (int i = 0; i < weights.GetLength(0); i++)
+        {
+            for (int j = 0; j < weights.GetLength(1); j++)
+            {
+                weights[i, j] = rand.NextDouble();
+            }           
+        }
+        for (int i = 0; i < biases.GetLength(0); i++)
+        {
+            biases[i] = rand.NextDouble();
+        }
+    }
+
     double[] CalculateValues(double[] previousValues)
     {
-        //TODO
+        double sum;                                     //temporary summation variable
+        for (int i = 0; i < numNodes; i++)              //iterate once per value to be calculated
+        {
+            sum = 0;
+            sum += biases[i];
+            for (int j = 0; j < numNodesPrevious; j++)  //iterate once per weight
+            {
+                sum += weights[i, j] * previousValues[j];
+            }
+            sum = ActivationFunctions.Logistic(sum);    //normalize values between 0 and 1
+            values[i] = sum;
+        }
         return new double[1];
     }
 
@@ -66,7 +104,7 @@ public class Layer
 
 public static class ActivationFunctions
 {
-    public static double Logistic(double x)
+    public static double Logistic(double x)//is bounded between 0 and 1
     {
         return 1.0 / (1.0 + System.Math.Exp(-x));
     }
