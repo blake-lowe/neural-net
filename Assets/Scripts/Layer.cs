@@ -82,7 +82,7 @@ public class Layer
         }
     }
 
-    double[] CalculateValues(double[] previousValues)
+    double[] FeedForward(double[] previousValues)
     {
         double sum;                                     //temporary summation variable
         for (int i = 0; i < numNodes; i++)              //iterate once per value to be calculated
@@ -97,6 +97,17 @@ public class Layer
             values[i] = sum;
         }
         return new double[1];
+    }
+
+    void Backpropagate(double[] error)
+    {
+        double MSE = 0;                                     //mean square error
+        for (int i = 0; i < error.GetLength(0); i++)
+        {
+            MSE += error[i]*error[i];
+        }
+        MSE *= 1 / (2 * error.GetLength(0));
+        //TODO
     }
 
 
