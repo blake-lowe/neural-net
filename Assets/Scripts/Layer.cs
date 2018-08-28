@@ -7,7 +7,7 @@ public class Layer
 {
     readonly int numNodesPrevious;       //number of nodes in the previous layer
     readonly int numNodes;               //number of nodes in this layer
-    private Random rand;
+    Random rand;
     double[,] weights;                  //the weights connecting the previous layer to this layer
     double[] biases;                    //one bias for each node in this layer
     double[] values;                    //values used for feed-forward calculation
@@ -17,7 +17,7 @@ public class Layer
         weights = new double[numNodes, numNodesPrevious];
         biases = new double[numNodes];
         values = new double[numNodes];
-        rand = new Random();
+        Rand = new Random();
     }
 
     public Layer(int numNodesPrevious, int numNodes, Random rand)
@@ -25,7 +25,15 @@ public class Layer
         weights = new double[numNodes, numNodesPrevious];
         biases = new double[numNodes];
         values = new double[numNodes];
-        this.rand = rand;
+        this.Rand = rand;
+    }
+
+    public Layer(int numNodesPrevious, int numNodes, Random rand, double[,] weights)
+    {
+        this.weights = weights; ;
+        biases = new double[numNodes];
+        values = new double[numNodes];
+        this.Rand = rand;
     }
 
     public double[,] Weights
@@ -67,18 +75,31 @@ public class Layer
         }
     }
 
+    public Random Rand
+    {
+        get
+        {
+            return rand;
+        }
+
+        set
+        {
+            rand = value;
+        }
+    }
+
     void RandomizeWeights()             //randomizes biases and weights
     {
         for (int i = 0; i < weights.GetLength(0); i++)
         {
             for (int j = 0; j < weights.GetLength(1); j++)
             {
-                weights[i, j] = rand.NextDouble();
+                weights[i, j] = Rand.NextDouble();
             }           
         }
         for (int i = 0; i < biases.GetLength(0); i++)
         {
-            biases[i] = rand.NextDouble();
+            biases[i] = Rand.NextDouble();
         }
     }
 
@@ -93,13 +114,13 @@ public class Layer
             {
                 sum += weights[i, j] * previousValues[j];
             }
-            sum = ActivationFunctions.Logistic(sum);    //normalize values between 0 and 1
+            sum = Functions.Sigmoid(sum);    //normalize values between 0 and 1
             values[i] = sum;
         }
-        return new double[1];
+        return values;
     }
 
-    void Backpropagate(double[] error)
+    double CalculateTotalError(double[] error)            //use only for output layer
     {
         double MSE = 0;                                     //mean square error
         for (int i = 0; i < error.GetLength(0); i++)
@@ -107,16 +128,38 @@ public class Layer
             MSE += error[i]*error[i];
         }
         MSE *= 1 / (2 * error.GetLength(0));
-        //TODO
+        return MSE;
     }
 
+    double[,] BackpropagateOutput(double[] targets)     //use only for the output layer //targets must have length equal to numNodes
+    {
+        double[,] deltaWeights = new double[weights.GetLength(0), weights.GetLength(1)];//same size as weights
+        for (int i = 0; i < numNodes; i++)              
+        {
+            for (int j = 0; j < numNodesPrevious; j++)  //iterate once per weight
+            {
+                deltaWeights[i, j] = targets[i] - values[i];
+            }
+        }
+        return deltaWeights;
+    }
+
+    double[,] BackpropagateHidden()
+    {
+        double[,] deltaWeights = new double[weights.GetLength(0), weights.GetLength(1)];//same size as weights
+        return deltaWeights;
+    }
 
 }
 
-public static class ActivationFunctions
+public static class Functions
 {
-    public static double Logistic(double x)//is bounded between 0 and 1
+    public static double Sigmoid(double x)//is bounded between 0 and 1
     {
         return 1.0 / (1.0 + System.Math.Exp(-x));
+    }
+    public static double SigmoidDeritive(double x)
+    {
+        return x * (1 - x);
     }
 }
