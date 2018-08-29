@@ -13,6 +13,8 @@ public class Layer
 
     public Layer(int numNodesPrevious, int numNodes)
     {
+        this.numNodesPrevious = numNodesPrevious;
+        this.numNodes = numNodes;
         weights = new double[numNodes, numNodesPrevious];
         biases = new double[numNodes];
         values = new double[numNodes];
@@ -21,6 +23,8 @@ public class Layer
 
     public Layer(int numNodesPrevious, int numNodes, Random rand)
     {
+        this.numNodesPrevious = numNodesPrevious;
+        this.numNodes = numNodes;
         weights = new double[numNodes, numNodesPrevious];
         biases = new double[numNodes];
         values = new double[numNodes];
@@ -102,7 +106,7 @@ public class Layer
         }
     }
 
-    double[] FeedForward(double[] previousValues)
+    public double[] FeedForward(double[] previousValues)
     {
         double sum;                                     //temporary summation variable
         for (int i = 0; i < numNodes; i++)              //iterate once per value to be calculated
@@ -119,7 +123,7 @@ public class Layer
         return values;
     }
 
-    double CalculateTotalError(double[] error)            //use only for output layer
+    public double CalculateTotalError(double[] error)            //use only for output layer
     {
         double MSE = 0;                                     //mean square error
         for (int i = 0; i < error.GetLength(0); i++)
@@ -130,7 +134,7 @@ public class Layer
         return MSE;
     }
 
-    double[,] BackpropagateOutput(double[] targets)     //returns array weight error values. Does not change weights
+    public double[,] BackpropagateOutput(double[] targets)     //returns array weight error values. Does not change weights
                                                         //use only for the output layer 
                                                         //targets must have length equal to numNodes
     {
@@ -146,7 +150,7 @@ public class Layer
         //biases todo
     }
 
-    double[,] BackpropagateHidden(double[,] errorValues, double[,] weightsAfter)     
+    public double[,] BackpropagateHidden(double[,] errorValues, double[,] weightsAfter)     
                                                         //returns array weight error values. Does not change weights
                                                         //use only for the hidden layers
                                                         //weightsAfter is the weights of the layer one step after this in the FeedForward direction
