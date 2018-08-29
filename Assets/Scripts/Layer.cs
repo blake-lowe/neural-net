@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
 public class Layer
 {
     readonly int numNodesPrevious;       //number of nodes in the previous layer
@@ -144,6 +143,7 @@ public class Layer
             }
         }
         return deltaWeights;
+        //biases todo
     }
 
     double[,] BackpropagateHidden(double[,] errorValues, double[,] weightsAfter)     
@@ -170,6 +170,7 @@ public class Layer
             }
         }
         return deltaWeights;
+        //biases todo
     }
 
 }
