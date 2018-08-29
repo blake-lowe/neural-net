@@ -8,7 +8,7 @@ public class Layer
     readonly int numNodesPrevious;       //number of nodes in the previous layer
     readonly int numNodes;               //number of nodes in this layer
     Random rand;
-    double[,] weights;                  //the weights connecting the previous layer to this layer
+    double[,] weights;                  //the weights connecting the previous layer to this layer [node, nodePrevious]
     double[] biases;                    //one bias for each node in this layer
     double[] values;                    //values used for feed-forward calculation
 
@@ -131,7 +131,9 @@ public class Layer
         return MSE;
     }
 
-    double[,] BackpropagateOutput(double[] targets)     //use only for the output layer //targets must have length equal to numNodes
+    double[,] BackpropagateOutput(double[] targets)     //returns array weight error values. Does not change weights
+                                                        //use only for the output layer 
+                                                        //targets must have length equal to numNodes
     {
         double[,] deltaWeights = new double[weights.GetLength(0), weights.GetLength(1)];//same size as weights
         for (int i = 0; i < numNodes; i++)              
@@ -144,9 +146,29 @@ public class Layer
         return deltaWeights;
     }
 
-    double[,] BackpropagateHidden()
+    double[,] BackpropagateHidden(double[,] errorValues, double[,] weightsAfter)     
+                                                        //returns array weight error values. Does not change weights
+                                                        //use only for the hidden layers
+                                                        //weightsAfter is the weights of the layer one step after this in the FeedForward direction
+                                                        //errors must have same dimensions as weights. 
+                                                        //will be called with the output of BackpropagateOutput() or BackpropagateHidden()
     {
         double[,] deltaWeights = new double[weights.GetLength(0), weights.GetLength(1)];//same size as weights
+        for (int i = 0; i < numNodes; i++)//iterate once per node
+        {
+            //find error value for the node
+            double sum = 0;
+            for (int k = 0; k < errorValues.GetLength(0); k++)
+            {
+                sum += errorValues[i, k] * weightsAfter[i, k];
+            }
+            double deltaWeight = Functions.SigmoidDeritive(values[i])* sum;
+            //assign error values to deltaWeights
+            for (int j = 0; j < numNodesPrevious; j++)  //iterate once per weight per node
+            {
+                deltaWeights[i, j] = deltaWeight;
+            }
+        }
         return deltaWeights;
     }
 
