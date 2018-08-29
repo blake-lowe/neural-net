@@ -65,9 +65,15 @@ public class NeuralNet
         layers[layers.Length - 1] = new Layer(hiddenLayerSize, numOutputs, rand);
     }
 
-    void FeedForward(double[] inputValues) //inputValues.Length must equal numInputs
+    double[] FeedForward(double[] inputValues) //inputValues.Length must equal numInputs //will return double[] with length = numOutputs
     {
-        //TODO
+        double[] lastValues = new double[hiddenLayerSize]; //holds values of the last layer to be passed into the current layer
+        lastValues = layers[0].FeedForward(inputValues);
+        for (int i = 1; i < layers.Length - 1; i++)
+        {
+            lastValues = layers[i].FeedForward(lastValues);
+        }
+        return layers[layers.Length - 1].FeedForward(lastValues);
     }
 
     void Backpropagate(double error)
