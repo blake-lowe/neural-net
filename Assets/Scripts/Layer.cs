@@ -7,16 +7,14 @@ public class Layer
     readonly int numNodesPrevious;       //number of nodes in the previous layer
     readonly int numNodes;               //number of nodes in this layer
     Random rand;
-    double[,] weights;                  //the weights connecting the previous layer to this layer [node, nodePrevious]
-    double[] biases;                    //one bias for each node in this layer
+    double[,] weights;                  //the weights connecting the previous layer to this layer [node, nodePrevious]//[i,0] is a bias for the node i
     double[] values;                    //values used for feed-forward calculation
 
     public Layer(int numNodesPrevious, int numNodes)
     {
         this.numNodesPrevious = numNodesPrevious;
         this.numNodes = numNodes;
-        weights = new double[numNodes, numNodesPrevious];
-        biases = new double[numNodes];
+        weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
         Rand = new Random();
     }
@@ -25,18 +23,19 @@ public class Layer
     {
         this.numNodesPrevious = numNodesPrevious;
         this.numNodes = numNodes;
-        weights = new double[numNodes, numNodesPrevious];
-        biases = new double[numNodes];
+        weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
         this.Rand = rand;
     }
 
     public Layer(int numNodesPrevious, int numNodes, Random rand, double[,] weights)
     {
-        this.weights = weights; ;
-        biases = new double[numNodes];
+        this.numNodesPrevious = numNodesPrevious;
+        this.numNodes = numNodes;
+        weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
         this.Rand = rand;
+        this.weights = weights;
     }
 
     public double[,] Weights
@@ -49,19 +48,6 @@ public class Layer
         set
         {
             weights = value;
-        }
-    }
-
-    public double[] Biases
-    {
-        get
-        {
-            return biases;
-        }
-
-        set
-        {
-            biases = value;
         }
     }
 
@@ -100,10 +86,6 @@ public class Layer
                 weights[i, j] = Rand.NextDouble();
             }           
         }
-        for (int i = 0; i < biases.GetLength(0); i++)
-        {
-            biases[i] = Rand.NextDouble();
-        }
     }
 
     public double[] FeedForward(double[] previousValues)
@@ -112,8 +94,8 @@ public class Layer
         for (int i = 0; i < numNodes; i++)              //iterate once per value to be calculated
         {
             sum = 0;
-            sum += biases[i];
-            for (int j = 0; j < numNodesPrevious; j++)  //iterate once per weight
+            sum += weights[i, 0];                       //add bias
+            for (int j = 1; j < numNodesPrevious; j++)  //iterate once per weight
             {
                 sum += weights[i, j] * previousValues[j];
             }
@@ -141,13 +123,12 @@ public class Layer
         double[,] deltaWeights = new double[weights.GetLength(0), weights.GetLength(1)];//same size as weights
         for (int i = 0; i < numNodes; i++)              
         {
-            for (int j = 0; j < numNodesPrevious; j++)  //iterate once per weight
+            for (int j = 0; j < numNodesPrevious + 1; j++)  //iterate once per weight and +1 for bias
             {
                 deltaWeights[i, j] = targets[i] - values[i];
             }
         }
         return deltaWeights;
-        //biases todo
     }
 
     public double[,] BackpropagateHidden(double[,] errorValues, double[,] weightsAfter)     
@@ -168,13 +149,12 @@ public class Layer
             }
             double deltaWeight = Functions.SigmoidDeritive(values[i])* sum;
             //assign error values to deltaWeights
-            for (int j = 0; j < numNodesPrevious; j++)  //iterate once per weight per node
+            for (int j = 0; j < numNodesPrevious + 1; j++)  //iterate once per weight per node and +1 for bias
             {
                 deltaWeights[i, j] = deltaWeight;
             }
         }
         return deltaWeights;
-        //biases todo
     }
 
 }
