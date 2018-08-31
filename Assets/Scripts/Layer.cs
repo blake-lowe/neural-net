@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 public class Layer
 {
-    readonly int numNodesPrevious;       //number of nodes in the previous layer
-    readonly int numNodes;               //number of nodes in this layer
+    private int numNodesPrevious;       //number of nodes in the previous layer
+    private int numNodes;               //number of nodes in this layer
     Random rand;
     double[,] weights;                  //the weights connecting the previous layer to this layer [node, nodePrevious]//[i,0] is a bias for the node i
     double[] values;                    //values used for feed-forward calculation
 
     public Layer(int numNodesPrevious, int numNodes)
     {
-        this.numNodesPrevious = numNodesPrevious;
-        this.numNodes = numNodes;
+        this.NumNodesPrevious = numNodesPrevious;
+        this.NumNodes = numNodes;
         weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
         Rand = new Random();
@@ -21,8 +21,8 @@ public class Layer
 
     public Layer(int numNodesPrevious, int numNodes, Random rand)
     {
-        this.numNodesPrevious = numNodesPrevious;
-        this.numNodes = numNodes;
+        this.NumNodesPrevious = numNodesPrevious;
+        this.NumNodes = numNodes;
         weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
         this.Rand = rand;
@@ -30,8 +30,8 @@ public class Layer
 
     public Layer(int numNodesPrevious, int numNodes, Random rand, double[,] weights)
     {
-        this.numNodesPrevious = numNodesPrevious;
-        this.numNodes = numNodes;
+        this.NumNodesPrevious = numNodesPrevious;
+        this.NumNodes = numNodes;
         weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
         this.Rand = rand;
@@ -77,6 +77,32 @@ public class Layer
         }
     }
 
+    public int NumNodesPrevious
+    {
+        get
+        {
+            return numNodesPrevious;
+        }
+
+        set
+        {
+            numNodesPrevious = value;
+        }
+    }
+
+    public int NumNodes
+    {
+        get
+        {
+            return numNodes;
+        }
+
+        set
+        {
+            numNodes = value;
+        }
+    }
+
     void RandomizeWeights()             //randomizes biases and weights
     {
         for (int i = 0; i < weights.GetLength(0); i++)
@@ -91,11 +117,11 @@ public class Layer
     public double[] FeedForward(double[] previousValues)
     {
         double sum;                                     //temporary summation variable
-        for (int i = 0; i < numNodes; i++)              //iterate once per value to be calculated
+        for (int i = 0; i < NumNodes; i++)              //iterate once per value to be calculated
         {
             sum = 0;
             sum += weights[i, 0];                       //add bias
-            for (int j = 1; j < numNodesPrevious; j++)  //iterate once per weight
+            for (int j = 1; j < NumNodesPrevious; j++)  //iterate once per weight
             {
                 sum += weights[i, j] * previousValues[j];
             }
@@ -121,9 +147,9 @@ public class Layer
                                                         //targets must have length equal to numNodes
     {
         double[,] deltaWeights = new double[weights.GetLength(0), weights.GetLength(1)];//same size as weights
-        for (int i = 0; i < numNodes; i++)              
+        for (int i = 0; i < NumNodes; i++)              
         {
-            for (int j = 0; j < numNodesPrevious + 1; j++)  //iterate once per weight and +1 for bias
+            for (int j = 0; j < NumNodesPrevious + 1; j++)  //iterate once per weight and +1 for bias
             {
                 deltaWeights[i, j] = targets[i] - values[i];
             }
@@ -139,7 +165,7 @@ public class Layer
                                                         //will be called with the output of BackpropagateOutput() or BackpropagateHidden()
     {
         double[,] deltaWeights = new double[weights.GetLength(0), weights.GetLength(1)];//same size as weights
-        for (int i = 0; i < numNodes; i++)//iterate once per node
+        for (int i = 0; i < NumNodes; i++)//iterate once per node
         {
             //find error value for the node
             double sum = 0;
@@ -149,7 +175,7 @@ public class Layer
             }
             double deltaWeight = Functions.SigmoidDeritive(values[i])* sum;
             //assign error values to deltaWeights
-            for (int j = 0; j < numNodesPrevious + 1; j++)  //iterate once per weight per node and +1 for bias
+            for (int j = 0; j < NumNodesPrevious + 1; j++)  //iterate once per weight per node and +1 for bias
             {
                 deltaWeights[i, j] = deltaWeight;
             }
