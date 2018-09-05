@@ -17,6 +17,8 @@ public class Layer
         weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
         Rand = new Random();
+
+        RandomizeWeights();
     }
 
     public Layer(int numNodesPrevious, int numNodes, Random rand)
@@ -26,6 +28,8 @@ public class Layer
         weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
         this.Rand = rand;
+
+        RandomizeWeights();
     }
 
     public Layer(int numNodesPrevious, int numNodes, Random rand, double[,] weights)
@@ -35,6 +39,7 @@ public class Layer
         weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
         this.Rand = rand;
+
         this.weights = weights;
     }
 
