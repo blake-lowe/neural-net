@@ -10,21 +10,6 @@ public class NeuralNet
     readonly int hiddenLayerSize;    //the number of nodes in each hidden layer //DOES NOT SUPPORT VARYING HIDDEN LAYER SIZES// although I don't see why not(8/29)
     Layer[] layers; //including hidden layers and output layers but not input layer. Logic works by attaching a set of weights to before a layer.
 
-    Random rand;
-
-    public Random Rand
-    {
-        get
-        {
-            return rand;
-        }
-
-        set
-        {
-            rand = value;
-        }
-    }
-
     public Layer[] Layers
     {
         get
@@ -39,7 +24,6 @@ public class NeuralNet
         this.numOutputs = numOutputs;
         this.numHiddenLayers = numHiddenLayers;
         this.hiddenLayerSize = hiddenLayerSize;
-        rand = new Random();
 
         //instantiate layers
         layers = new Layer[numHiddenLayers + 1];    //+1 for output layer
@@ -52,26 +36,6 @@ public class NeuralNet
         //assign last term (output Layer)
         layers[layers.Length - 1] = new Layer(hiddenLayerSize, numOutputs);
         
-    }
-
-    public NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int hiddenLayerSize, Random rand)//constructor to pass the random object to layers to enable reproduction of trials
-    {
-        this.numInputs = numInputs;
-        this.numOutputs = numOutputs;
-        this.numHiddenLayers = numHiddenLayers;
-        this.hiddenLayerSize = hiddenLayerSize;
-        this.rand = rand;
-
-        //instantiate layers
-        layers = new Layer[numHiddenLayers + 1];    //+1 for output layer
-        //assign first term (different because must fit into the input layer)
-        layers[0] = new Layer(numInputs, hiddenLayerSize, rand);
-        for (int i = 1; i < layers.Length - 1; i++)
-        {
-            layers[i] = new Layer(hiddenLayerSize, hiddenLayerSize, rand);
-        }
-        //assign last term (output Layer)
-        layers[layers.Length - 1] = new Layer(hiddenLayerSize, numOutputs, rand);
     }
 
     public double[] FeedForward(double[] inputValues) //inputValues.Length must equal numInputs //will return double[] with length = numOutputs
@@ -125,7 +89,7 @@ public class NeuralNet
         }
         updatedLayers[0].Weights = updatedWeights;
 
-        NeuralNet updatedNet = new NeuralNet(numInputs, numOutputs, numHiddenLayers, hiddenLayerSize, rand);
+        NeuralNet updatedNet = new NeuralNet(numInputs, numOutputs, numHiddenLayers, hiddenLayerSize);
         updatedNet.layers = updatedLayers;
         return updatedNet;
     }
