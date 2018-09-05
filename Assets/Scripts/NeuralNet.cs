@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 public class NeuralNet
 {
-    readonly int numInputs;          //number of nodes in the input layer of the net
-    readonly int numOutputs;         //number of nodes in the output layer of the net
-    readonly int numHiddenLayers;    //the number of hidden layers
-    readonly int hiddenLayerSize;    //the number of nodes in each hidden layer //DOES NOT SUPPORT VARYING HIDDEN LAYER SIZES// although I don't see why not(8/29)
+    int numInputs;          //number of nodes in the input layer of the net
+    int numOutputs;         //number of nodes in the output layer of the net
+    int numHiddenLayers;    //the number of hidden layers
+    int hiddenLayerSize;    //the number of nodes in each hidden layer //DOES NOT SUPPORT VARYING HIDDEN LAYER SIZES// although I don't see why not(8/29)
     Layer[] layers; //including hidden layers and output layers but not input layer. Logic works by attaching a set of weights to before a layer.
 
     public Layer[] Layers
@@ -15,6 +15,43 @@ public class NeuralNet
         get
         {
             return layers;
+        }
+    }
+
+    public int NumInputs
+    {
+        get
+        {
+            return numInputs;
+        }
+
+        set
+        {
+            numInputs = value;
+        }
+    }
+
+    public int NumOutputs
+    {
+        get
+        {
+            return numOutputs;
+        }
+    }
+
+    public int NumHiddenLayers
+    {
+        get
+        {
+            return numHiddenLayers;
+        }
+    }
+
+    public int HiddenLayerSize
+    {
+        get
+        {
+            return hiddenLayerSize;
         }
     }
 
