@@ -8,7 +8,7 @@ public class NeuralNet
     readonly int numOutputs;         //number of nodes in the output layer of the net
     readonly int numHiddenLayers;    //the number of hidden layers
     readonly int hiddenLayerSize;    //the number of nodes in each hidden layer //DOES NOT SUPPORT VARYING HIDDEN LAYER SIZES// although I don't see why not(8/29)
-    private Layer[] layers; //including hidden layers and output layers but not input layer. Logic works by attaching a set of weights to before a layer.
+    Layer[] layers; //including hidden layers and output layers but not input layer. Logic works by attaching a set of weights to before a layer.
 
     Random rand;
 
@@ -25,12 +25,21 @@ public class NeuralNet
         }
     }
 
+    public Layer[] Layers
+    {
+        get
+        {
+            return layers;
+        }
+    }
+
     public NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int hiddenLayerSize)
     {
         this.numInputs = numInputs;
         this.numOutputs = numOutputs;
         this.numHiddenLayers = numHiddenLayers;
         this.hiddenLayerSize = hiddenLayerSize;
+        rand = new Random();
 
         //instantiate layers
         layers = new Layer[numHiddenLayers + 1];    //+1 for output layer
@@ -65,7 +74,7 @@ public class NeuralNet
         layers[layers.Length - 1] = new Layer(hiddenLayerSize, numOutputs, rand);
     }
 
-    double[] FeedForward(double[] inputValues) //inputValues.Length must equal numInputs //will return double[] with length = numOutputs
+    public double[] FeedForward(double[] inputValues) //inputValues.Length must equal numInputs //will return double[] with length = numOutputs
     {
         double[] lastValues = new double[hiddenLayerSize]; //holds values of the last layer to be passed into the current layer
         lastValues = layers[0].FeedForward(inputValues);
@@ -76,7 +85,7 @@ public class NeuralNet
         return layers[layers.Length - 1].FeedForward(lastValues);
     }
 
-    NeuralNet Backpropagate(double[] targets)//targets must have length equal to numNodes
+    public NeuralNet Backpropagate(double[] targets)//targets must have length equal to numNodes
     {
         Layer[] updatedLayers = new Layer[numHiddenLayers + 1];
         //output layer
