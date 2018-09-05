@@ -1,16 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class RandHolder : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+public static class RandHolder {
+
+    public static Random rand = new Random();
+
+    public static double NextDouble()
+    {
+        return rand.NextDouble();
+    }
 }
