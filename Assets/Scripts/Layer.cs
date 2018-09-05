@@ -6,7 +6,6 @@ public class Layer
 {
     private int numNodesPrevious;       //number of nodes in the previous layer
     private int numNodes;               //number of nodes in this layer
-    Random rand;
     double[,] weights;                  //the weights connecting the previous layer to this layer [node, nodePrevious]//[i,0] is a bias for the node i
     double[] values;                    //values used for feed-forward calculation
 
@@ -16,29 +15,16 @@ public class Layer
         this.NumNodes = numNodes;
         weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
-        Rand = new Random();
 
         RandomizeWeights();
     }
 
-    public Layer(int numNodesPrevious, int numNodes, Random rand)
+    public Layer(int numNodesPrevious, int numNodes, double[,] weights)
     {
         this.NumNodesPrevious = numNodesPrevious;
         this.NumNodes = numNodes;
         weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
-        this.Rand = rand;
-
-        RandomizeWeights();
-    }
-
-    public Layer(int numNodesPrevious, int numNodes, Random rand, double[,] weights)
-    {
-        this.NumNodesPrevious = numNodesPrevious;
-        this.NumNodes = numNodes;
-        weights = new double[numNodes, numNodesPrevious + 1];
-        values = new double[numNodes];
-        this.Rand = rand;
 
         this.weights = weights;
     }
@@ -66,19 +52,6 @@ public class Layer
         set
         {
             values = value;
-        }
-    }
-
-    public Random Rand
-    {
-        get
-        {
-            return rand;
-        }
-
-        set
-        {
-            rand = value;
         }
     }
 
@@ -114,7 +87,7 @@ public class Layer
         {
             for (int j = 0; j < weights.GetLength(1); j++)
             {
-                weights[i, j] = Rand.NextDouble();
+                weights[i, j] = RandHolder.NextDouble();
             }           
         }
     }
