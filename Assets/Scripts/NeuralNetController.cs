@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class NeuralNetController : MonoBehaviour {
 
-    private readonly NeuralNet net = new NeuralNet(1,3,5,5);//not serialized
+    private readonly NeuralNet net = new NeuralNet(1,10,25,10);//not serialized//CHANGE DIMENSIONS HERE
     
     public GameObject prefab;//serialized
     public GameObject textPrefab;//serialized
+
+    public Color Color0;  //limit of nodes and weights color when they approach a value of 0
+    public Color Color1;  //limit of nodes and weights color when they approach a value of 1
 
     private GameObject[,] nodes;
 
@@ -29,24 +32,31 @@ public class NeuralNetController : MonoBehaviour {
 
         double[] outputs = net.FeedForward(new double[] { 0.5 });
 
+        //create an array with nodes GameObjects//
         for (int i = 0; i < net.NumHiddenLayers; i++)//hidden layers
         {
             for (int j = 0; j < net.HiddenLayerSize; j++)
             {
+                //instantiate cube
                 GameObject temp = Instantiate(prefab, new Vector3(2*i, 0, 2*j), Quaternion.identity);
+                //instantiate text as child of cube
                 GameObject text = Instantiate(textPrefab, temp.transform);
-                nodes[i, j] = text;
+                nodes[i, j] = temp;
             }
         }
         for (int j = 0; j < net.NumOutputs; j++)//output layer
         {
+            //instantiate cube
             GameObject temp = Instantiate(prefab, new Vector3(2 * net.NumHiddenLayers, 0, 2 * j), Quaternion.identity);
+ 
+           
+            //instantiate text as child of cube
             GameObject text = Instantiate(textPrefab, temp.transform);
-            nodes[net.NumHiddenLayers, j] = text;
+            nodes[net.NumHiddenLayers, j] = temp;
         }
 
 
-        UpdateValues();
+        UpdateValues();//change values and colors
         Debug.Log(outputs[0]);
     }
 
@@ -62,12 +72,30 @@ public class NeuralNetController : MonoBehaviour {
         {
             for (int j = 0; j < net.HiddenLayerSize; j++)
             {
-                nodes[i, j].GetComponent<TMPro.TextMeshPro>().text = net.Layers[i].Values[j].ToString();
+                double value = net.Layers[i].Values[j];
+                nodes[i, j].GetComponentInChildren<TMPro.TextMeshPro>().text = value.ToString();
+                nodes[i, j].GetComponent<Renderer>().material.SetColor("_Color", Helper.InterpolateColor(Color0, Color1, value));
             }
         }
         for (int j = 0; j < net.NumOutputs; j++)//output layer
         {
-            nodes[net.NumHiddenLayers, j].GetComponent<TMPro.TextMeshPro>().text = net.Layers[net.NumHiddenLayers].Values[j].ToString();
+            double value = net.Layers[net.NumHiddenLayers].Values[j];
+            nodes[net.NumHiddenLayers, j].GetComponentInChildren<TMPro.TextMeshPro>().text = value.ToString();
+            nodes[net.NumHiddenLayers, j].GetComponent<Renderer>().material.SetColor("_Color", Helper.InterpolateColor(Color0, Color1, value));
         }
+    }
+}
+
+static class Helper
+{
+    public static Color InterpolateColor(Color Color0, Color Color1, double x)
+    {
+        double r = ((x * (Color1.r - Color0.r)) + Color0.r);
+        double g = ((x * (Color1.g - Color0.g)) + Color0.g);
+        double b = ((x * (Color1.b - Color0.b)) + Color0.b);
+        Debug.Log(r.ToString());
+        Debug.Log(g.ToString());
+        return new Color((float)r, (float)g, (float)b);
+        
     }
 }
