@@ -87,6 +87,7 @@ public class Layer
         {
             for (int j = 0; j < weights.GetLength(1); j++)
             {
+                
                 weights[i, j] = RandHolder.NextDouble();
             }           
         }

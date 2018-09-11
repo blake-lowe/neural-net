@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NeuralNetController : MonoBehaviour {
 
-    private readonly NeuralNet net = new NeuralNet(1,10,25,10);//not serialized//CHANGE DIMENSIONS HERE
+    private readonly NeuralNet net = new NeuralNet(1,2,4,1);//not serialized//CHANGE DIMENSIONS HERE
     
     public GameObject prefab;//serialized
     public GameObject textPrefab;//serialized
@@ -30,7 +30,7 @@ public class NeuralNetController : MonoBehaviour {
     void Start()
     {
 
-        double[] outputs = net.FeedForward(new double[] { 0.5 });
+        double[] outputs = net.FeedForward(new double[] { 0.1 });
 
         //create an array with nodes GameObjects//
         for (int i = 0; i < net.NumHiddenLayers; i++)//hidden layers
@@ -93,8 +93,6 @@ static class Helper
         double r = ((x * (Color1.r - Color0.r)) + Color0.r);
         double g = ((x * (Color1.g - Color0.g)) + Color0.g);
         double b = ((x * (Color1.b - Color0.b)) + Color0.b);
-        Debug.Log(r.ToString());
-        Debug.Log(g.ToString());
         return new Color((float)r, (float)g, (float)b);
         
     }
