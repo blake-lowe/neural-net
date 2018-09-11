@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NeuralNetController : MonoBehaviour {
 
-    private readonly NeuralNet net = new NeuralNet(1,2,4,1);//not serialized//CHANGE DIMENSIONS HERE
+    private NeuralNet net = new NeuralNet(1,1,3,2);//not serialized//CHANGE DIMENSIONS HERE
     
     public GameObject prefab;//serialized
     public GameObject textPrefab;//serialized
@@ -58,6 +58,9 @@ public class NeuralNetController : MonoBehaviour {
 
         UpdateValues();//change values and colors
         Debug.Log(outputs[0]);
+        net = net.Backpropagate(new double[1] { 0.2 });
+        Debug.Log(outputs[0]);
+        UpdateValues();
     }
 
 	// Update is called once per frame

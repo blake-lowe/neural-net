@@ -126,7 +126,7 @@ public class Layer
                                                         //targets must have length equal to numNodes
     {
         double[,] deltaWeights = new double[weights.GetLength(0), weights.GetLength(1)];//same size as weights
-        for (int i = 0; i < NumNodes; i++)              
+        for (int i = 0; i < numNodes; i++)              
         {
             for (int j = 0; j < NumNodesPrevious + 1; j++)  //iterate once per weight and +1 for bias
             {
