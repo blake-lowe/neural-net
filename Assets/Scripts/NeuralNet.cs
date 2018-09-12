@@ -81,7 +81,7 @@ public class NeuralNet
         lastValues = layers[0].FeedForward(inputValues);
         for (int i = 1; i < layers.Length - 1; i++)
         {
-            lastValues = layers[i].FeedForward(lastValues);
+            lastValues = layers[i].FeedForward(lastValues);//if you get an error on this line check the outputs and target array sizes. Maybe net constructed wrong?
         }
         return layers[layers.Length - 1].FeedForward(lastValues);
     }
@@ -99,7 +99,7 @@ public class NeuralNet
                 updatedWeights[i, j] = layers[layers.Length - 1].Weights[i, j] + deltaWeights[i, j];
             }
         }
-        updatedLayers[updatedLayers.Length - 1].Weights = updatedWeights;
+        updatedLayers[updatedLayers.Length - 1] = new Layer(hiddenLayerSize, numOutputs, updatedWeights);
 
         updatedWeights = new double[hiddenLayerSize, hiddenLayerSize];      //hidden layers
         for (int hiddenLayerIndex = numHiddenLayers - 1; hiddenLayerIndex > 0; hiddenLayerIndex--)
@@ -112,7 +112,7 @@ public class NeuralNet
                     updatedWeights[i, j] = layers[hiddenLayerIndex].Weights[i, j] + deltaWeights[i, j];
                 }
             }
-            updatedLayers[hiddenLayerIndex].Weights = updatedWeights;
+            updatedLayers[hiddenLayerIndex] = new Layer(hiddenLayerSize, hiddenLayerSize, updatedWeights);
         }
 
         updatedWeights = new double[hiddenLayerSize, numInputs];            //first hidden layer
@@ -124,7 +124,7 @@ public class NeuralNet
                 updatedWeights[i, j] = layers[0].Weights[i, j] + deltaWeights[i, j];
             }
         }
-        updatedLayers[0].Weights = updatedWeights;
+        updatedLayers[0] = new Layer(numInputs, hiddenLayerSize, updatedWeights);
 
         NeuralNet updatedNet = new NeuralNet(numInputs, numOutputs, numHiddenLayers, hiddenLayerSize);
         updatedNet.layers = updatedLayers;
