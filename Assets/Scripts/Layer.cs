@@ -136,7 +136,7 @@ public class Layer
         return deltaWeights;
     }
 
-    public double[,] BackpropagateHidden(double[,] errorValues, double[,] weightsAfter)     //this implementation is ok. Problem is probably in neuralnet.cs ln107
+    public double[,] BackpropagateHidden(double[,] errorValues, double[,] weightsAfter)
                                                         //returns array weight error values. Does not change weights
                                                         //use only for the hidden layers
                                                         //weightsAfter is the weights of the layer one step after this in the FeedForward direction
@@ -144,11 +144,11 @@ public class Layer
                                                         //will be called with the output of BackpropagateOutput() or BackpropagateHidden()
     {
         double[,] deltaWeights = new double[weights.GetLength(0), weights.GetLength(1)];//same size as weights
-        for (int i = 0; i < NumNodes; i++)//iterate once per node
+        for (int i = 0; i < weightsAfter.GetLength(0); i++)//iterate once per node
         {
             //find error value for the node
             double sum = 0;
-            for (int k = 0; k < errorValues.GetLength(0); k++)
+            for (int k = 0; k < weightsAfter.GetLength(1); k++)
             {
                 sum += errorValues[i, k] * weightsAfter[i, k];
             }

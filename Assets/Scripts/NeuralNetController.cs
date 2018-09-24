@@ -58,9 +58,16 @@ public class NeuralNetController : MonoBehaviour {
 
         UpdateValues();//change values and colors
         Debug.Log(outputs[0]);
-        net = net.Backpropagate(new double[1] { 0.2 });
-        Debug.Log(outputs[0]);
-        UpdateValues();
+        for (int i = 0; i < 3; i++)
+        {
+            net = net.Backpropagate(new double[1] { 0.2 });
+            outputs = net.FeedForward(new double[] { 0.1 });
+            Debug.Log(outputs[0]);
+            UpdateValues();
+        }
+
+
+        
     }
 
 	// Update is called once per frame
