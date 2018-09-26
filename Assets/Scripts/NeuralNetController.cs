@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NeuralNetController : MonoBehaviour {
 
-    private NeuralNet net = new NeuralNet(1,1,3,2);//not serialized//CHANGE DIMENSIONS HERE
+    private NeuralNet net = new NeuralNet(1,1,3,2, 0.1);//not serialized//CHANGE DIMENSIONS HERE
     
     public GameObject prefab;//serialized
     public GameObject textPrefab;//serialized

@@ -8,6 +8,7 @@ public class NeuralNet
     int numOutputs;         //number of nodes in the output layer of the net
     int numHiddenLayers;    //the number of hidden layers
     int hiddenLayerSize;    //the number of nodes in each hidden layer //DOES NOT SUPPORT VARYING HIDDEN LAYER SIZES// although I don't see why not(8/29)
+    double learningRate;       //factor to multiply deltaweights by during backpropagation
     Layer[] layers; //including hidden layers and output layers but not input layer. Logic works by attaching a set of weights to before a layer.
 
     public Layer[] Layers
@@ -55,12 +56,26 @@ public class NeuralNet
         }
     }
 
-    public NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int hiddenLayerSize)
+    public double LearningRate
+    {
+        get
+        {
+            return learningRate;
+        }
+
+        set
+        {
+            learningRate = value;
+        }
+    }
+
+    public NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int hiddenLayerSize, double learningRate)
     {
         this.numInputs = numInputs;
         this.numOutputs = numOutputs;
         this.numHiddenLayers = numHiddenLayers;
         this.hiddenLayerSize = hiddenLayerSize;
+        this.learningRate = learningRate;
 
         //instantiate layers
         layers = new Layer[numHiddenLayers + 1];    //+1 for output layer
@@ -96,7 +111,7 @@ public class NeuralNet
         {
             for (int j = 0; j < hiddenLayerSize; j++)
             {
-                updatedWeights[i, j] = layers[layers.Length - 1].Weights[i, j] + deltaWeights[i, j];
+                updatedWeights[i, j] = layers[layers.Length - 1].Weights[i, j] + learningRate*deltaWeights[i, j];
             }
         }
         updatedLayers[updatedLayers.Length - 1] = new Layer(hiddenLayerSize, numOutputs, updatedWeights);
@@ -109,7 +124,7 @@ public class NeuralNet
             {
                 for (int j = 0; j < hiddenLayerSize; j++)
                 {
-                    updatedWeights[i, j] = layers[hiddenLayerIndex].Weights[i, j] + deltaWeights[i, j];
+                    updatedWeights[i, j] = layers[hiddenLayerIndex].Weights[i, j] + learningRate*deltaWeights[i, j];
                 }
             }
             updatedLayers[hiddenLayerIndex] = new Layer(hiddenLayerSize, hiddenLayerSize, updatedWeights);
@@ -121,12 +136,12 @@ public class NeuralNet
         {
             for (int j = 0; j < numInputs; j++)
             {
-                updatedWeights[i, j] = layers[0].Weights[i, j] + deltaWeights[i, j];
+                updatedWeights[i, j] = layers[0].Weights[i, j] + learningRate*deltaWeights[i, j];
             }
         }
         updatedLayers[0] = new Layer(numInputs, hiddenLayerSize, updatedWeights);
 
-        NeuralNet updatedNet = new NeuralNet(numInputs, numOutputs, numHiddenLayers, hiddenLayerSize);
+        NeuralNet updatedNet = new NeuralNet(numInputs, numOutputs, numHiddenLayers, hiddenLayerSize, learningRate);
         updatedNet.layers = updatedLayers;
         return updatedNet;
     }
