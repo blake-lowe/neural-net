@@ -106,10 +106,10 @@ public class NeuralNet
         Layer[] updatedLayers = new Layer[numHiddenLayers + 1];
         //output layer
         double[,] deltaWeights = layers[layers.Length - 1].BackpropagateOutput(targets);
-        double[,] updatedWeights = new double[numOutputs, hiddenLayerSize];
+        double[,] updatedWeights = new double[numOutputs, hiddenLayerSize + 1];
         for (int i = 0; i < numOutputs; i++)
         {
-            for (int j = 0; j < hiddenLayerSize; j++)
+            for (int j = 0; j < hiddenLayerSize + 1; j++)
             {
                 updatedWeights[i, j] = layers[layers.Length - 1].Weights[i, j] + learningRate*deltaWeights[i, j];
             }

@@ -23,7 +23,6 @@ public class Layer
     {
         this.NumNodesPrevious = numNodesPrevious;
         this.NumNodes = numNodes;
-        weights = new double[numNodes, numNodesPrevious + 1];
         values = new double[numNodes];
 
         this.weights = weights;

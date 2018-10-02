@@ -58,7 +58,7 @@ public class NeuralNetController : MonoBehaviour {
 
         UpdateValues();//change values and colors
         Debug.Log(outputs[0]);
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 5; i++)
         {
             net = net.Backpropagate(new double[1] { 0.2 });//at this line, the values of net become zero. //because the sigmoid of zero is 0.5, no matter the input the net returns 0.5
             outputs = net.FeedForward(new double[] { 0.1 });
