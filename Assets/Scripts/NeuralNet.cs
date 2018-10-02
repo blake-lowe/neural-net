@@ -116,7 +116,7 @@ public class NeuralNet
         }
         updatedLayers[updatedLayers.Length - 1] = new Layer(hiddenLayerSize, numOutputs, updatedWeights);
 
-        updatedWeights = new double[hiddenLayerSize, hiddenLayerSize];      //hidden layers
+        updatedWeights = new double[hiddenLayerSize, hiddenLayerSize + 1];      //hidden layers
         for (int hiddenLayerIndex = numHiddenLayers - 1; hiddenLayerIndex > 0; hiddenLayerIndex--)
         {
             deltaWeights = layers[hiddenLayerIndex].BackpropagateHidden(deltaWeights, layers[hiddenLayerIndex + 1].Weights);
@@ -130,7 +130,7 @@ public class NeuralNet
             updatedLayers[hiddenLayerIndex] = new Layer(hiddenLayerSize, hiddenLayerSize, updatedWeights);
         }
 
-        updatedWeights = new double[hiddenLayerSize, numInputs];            //first hidden layer
+        updatedWeights = new double[hiddenLayerSize, numInputs + 1];            //first hidden layer
         deltaWeights = layers[0].BackpropagateHidden(deltaWeights, layers[1].Weights);
         for (int i = 0; i < hiddenLayerSize; i++)
         {

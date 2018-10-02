@@ -13,8 +13,8 @@ public class Layer
     {
         this.NumNodesPrevious = numNodesPrevious;
         this.NumNodes = numNodes;
-        weights = new double[numNodes, numNodesPrevious + 1];
-        values = new double[numNodes];
+        this.weights = new double[numNodes, numNodesPrevious + 1];
+        this.values = new double[numNodes];
 
         RandomizeWeights();
     }
@@ -23,8 +23,9 @@ public class Layer
     {
         this.NumNodesPrevious = numNodesPrevious;
         this.NumNodes = numNodes;
-        values = new double[numNodes];
+        this.values = new double[numNodes];
 
+        this.weights = new double[numNodes, numNodesPrevious + 1];
         this.weights = weights;
     }
 
