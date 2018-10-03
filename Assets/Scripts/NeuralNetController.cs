@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class NeuralNetController : MonoBehaviour {
 
-    private NeuralNet net = new NeuralNet(1,1,1,1,0.1);//not serialized//CHANGE DIMENSIONS HERE
-    
+    private NeuralNet net = new NeuralNet(2,2,5,5,0.1);//not serialized//CHANGE DIMENSIONS HERE NeuralNet(numInputs, numOutputs, numHiddenLayers, hiddenLayerSize, learningRate)
+
     public GameObject prefab;//serialized
     public GameObject textPrefab;//serialized
 
@@ -30,7 +30,7 @@ public class NeuralNetController : MonoBehaviour {
     void Start()
     {
 
-        double[] outputs = net.FeedForward(new double[] { 0.1 });
+        double[] outputs = net.FeedForward(new double[] { 0.1, 0.5 });
 
         //create an array with nodes GameObjects//
         for (int i = 0; i < net.NumHiddenLayers; i++)//hidden layers
@@ -58,11 +58,13 @@ public class NeuralNetController : MonoBehaviour {
 
         UpdateValues();//change values and colors
         Debug.Log(outputs[0]);
+        Debug.Log(outputs[1]);
         for (int i = 0; i < 100; i++)
         {
-            net = net.Backpropagate(new double[1] { 0.9 });
-            outputs = net.FeedForward(new double[] { 0.1 });
+            net = net.Backpropagate(new double[] { 0.1, 0.5 }, new double[] { 0.1 , 0.5 });
+            outputs = net.FeedForward(new double[] { 0.1 , 0.5 });
             Debug.Log(outputs[0]);
+            Debug.Log(outputs[1]);
             //UpdateValues();
         }
 
