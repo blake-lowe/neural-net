@@ -44,6 +44,17 @@ public class CurveFit : MonoBehaviour {
             NetPoints[i] = Instantiate(prefab);
         }
         updateNetPoints();
+
+        //backpropagate
+        for (int i = 0; i < 1; i++)
+        {
+            for (int j = 0; j < numPoints; j++)
+            {
+                double x = min + j * ((max - min) / numPoints);
+                double y = CurveToFit.Function(x);
+                net.Backpropagate(new double[] { x }, new double[] { y });
+            }
+        }
     }
 	
 	// Update is called once per frame
