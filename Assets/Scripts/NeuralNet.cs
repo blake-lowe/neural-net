@@ -101,7 +101,7 @@ public class NeuralNet
         return layers[layers.Length - 1].FeedForward(lastValues);
     }
 
-    public NeuralNet Backpropagate(double[] inputValues, double[] targets)//targets must have length equal to numOutputs
+    public NeuralNet Backpropagate(double[] inputValues, double[] targets)//targets must have length equal to numOutputs. usage is net = net.Backpropagate();
     {
         this.FeedForward(inputValues);
         Layer[] updatedLayers = new Layer[numHiddenLayers + 1];

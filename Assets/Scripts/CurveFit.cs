@@ -52,7 +52,8 @@ public class CurveFit : MonoBehaviour {
             {
                 double x = min + j * ((max - min) / numPoints);
                 double y = CurveToFit.Function(x);
-                net.Backpropagate(new double[] { x }, new double[] { y });
+                net = net.Backpropagate(new double[] { x }, new double[] { y });
+                updateNetPoints();
             }
         }
     }
