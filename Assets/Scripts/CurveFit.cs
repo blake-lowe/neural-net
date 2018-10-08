@@ -6,8 +6,8 @@ static class CurveToFit
 {
     public static double Function(double x)
     {
-        double y = x;                           //change function here
-        return y;
+        double y = Mathf.Pow((float)x,2);                           //change function here
+        return (double)y;
     }
 }
 
@@ -45,7 +45,20 @@ public class CurveFit : MonoBehaviour {
         }
         updateNetPoints();
 
-        //backpropagate
+        for (int i = 0; i < 10; i++)
+        {
+            backpropagate();
+        }
+        //Debug.Log(net.FeedForward(new double[] { 1.0 })[0]);
+        //Debug.Log(net.FeedForward(new double[] { 10.0 })[0]);
+    }
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+    void backpropagate()
+    {
         for (int i = 0; i < 1; i++)
         {
             for (int j = 0; j < numPoints; j++)
@@ -57,11 +70,6 @@ public class CurveFit : MonoBehaviour {
             }
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     void updateCurvePoints ()
     {
@@ -69,7 +77,6 @@ public class CurveFit : MonoBehaviour {
         {
             double x = min + i * ((max - min)/numPoints);
             double y = CurveToFit.Function(x);
-            Debug.Log(y);
             CurvePoints[i].GetComponent<Transform>().position = new Vector3((float)(coordinateScale*x), (float)(coordinateScale *(float)y), 0);
 
         }
@@ -84,6 +91,8 @@ public class CurveFit : MonoBehaviour {
             inputs[0] = x;
             double[] outputs = net.FeedForward(inputs);
             double y = outputs[0];
+            Debug.Log(x);
+            Debug.Log(y);
             NetPoints[i].GetComponent<Transform>().position = new Vector3((float)(coordinateScale * x), (float)(coordinateScale * (float)y), 0);
         }
     }
