@@ -6,14 +6,16 @@ static class CurveToFit
 {
     public static double Function(double x)
     {
-        double y = Mathf.Pow((float)x,2);                           //change function here
-        return (double)y;
+        double y = Mathf.Pow((float) x,2);                           //change function here
+        return (double) y;
     }
 }
 
 public class CurveFit : MonoBehaviour {
 
-    public GameObject prefab;
+    public GameObject VisualNet;
+    public GameObject netPrefab;
+    public GameObject curvePrefab;
     public double coordinateScale;
     public double min;
     public double max;
@@ -21,6 +23,7 @@ public class CurveFit : MonoBehaviour {
 
     public int numHiddenLayers;
     public int hiddenLayerSize;
+    public int numBackpropagationPasses;
     public double learningRate;
 
     private GameObject[] CurvePoints;
@@ -29,10 +32,13 @@ public class CurveFit : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+
+
         CurvePoints = new GameObject[numPoints];
         for (int i = 0; i < CurvePoints.Length; i++)
         {
-            CurvePoints[i] = Instantiate(prefab);
+            CurvePoints[i] = Instantiate(curvePrefab);
         }
         updateCurvePoints();
 
@@ -41,16 +47,14 @@ public class CurveFit : MonoBehaviour {
         NetPoints = new GameObject[numPoints];
         for (int i = 0; i < NetPoints.Length; i++)
         {
-            NetPoints[i] = Instantiate(prefab);
+            NetPoints[i] = Instantiate(netPrefab);
         }
         updateNetPoints();
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < numBackpropagationPasses; i++)
         {
             backpropagate();
         }
-        //Debug.Log(net.FeedForward(new double[] { 1.0 })[0]);
-        //Debug.Log(net.FeedForward(new double[] { 10.0 })[0]);
     }
 	
 	// Update is called once per frame
@@ -91,8 +95,8 @@ public class CurveFit : MonoBehaviour {
             inputs[0] = x;
             double[] outputs = net.FeedForward(inputs);
             double y = outputs[0];
-            Debug.Log(x);
-            Debug.Log(y);
+            //Debug.Log(x);
+            //Debug.Log(y);
             NetPoints[i].GetComponent<Transform>().position = new Vector3((float)(coordinateScale * x), (float)(coordinateScale * (float)y), 0);
         }
     }

@@ -30,6 +30,7 @@ public class NeuralNetController : MonoBehaviour {
     void Start()
     {
 
+
         double[] outputs = net.FeedForward(new double[] { 0.1, 0.5 });
 
         //create an array with nodes GameObjects//
@@ -57,15 +58,10 @@ public class NeuralNetController : MonoBehaviour {
 
 
         UpdateValues();//change values and colors
-        Debug.Log(outputs[0]);
-        Debug.Log(outputs[1]);
         for (int i = 0; i < 100; i++)
         {
             net = net.Backpropagate(new double[] { 0.1, 0.5 }, new double[] { 0.1 , 0.5 });
-            outputs = net.FeedForward(new double[] { 0.1 , 0.5 });
-            Debug.Log(outputs[0]);
-            Debug.Log(outputs[1]);
-            //UpdateValues();
+            outputs = net.FeedForward(new double[] { 0.1 , 0.5 });;
         }
 
 
@@ -95,17 +91,5 @@ public class NeuralNetController : MonoBehaviour {
             nodes[net.NumHiddenLayers, j].GetComponentInChildren<TMPro.TextMeshPro>().text = value.ToString();
             nodes[net.NumHiddenLayers, j].GetComponent<Renderer>().material.SetColor("_Color", Helper.InterpolateColor(Color0, Color1, value));
         }
-    }
-}
-
-static class Helper
-{
-    public static Color InterpolateColor(Color Color0, Color Color1, double x)
-    {
-        double r = ((x * (Color1.r - Color0.r)) + Color0.r);
-        double g = ((x * (Color1.g - Color0.g)) + Color0.g);
-        double b = ((x * (Color1.b - Color0.b)) + Color0.b);
-        return new Color((float)r, (float)g, (float)b);
-        
     }
 }
