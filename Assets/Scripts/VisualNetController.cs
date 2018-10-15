@@ -11,12 +11,13 @@ public class VisualNetController : MonoBehaviour
     {
         vNet.net = new NeuralNet(1, 1, 4, 3, 0.1);
         vNet.net.FeedForward(new double[] { 0.1 });
+        vNet.Initialize();
         for (int i = 0; i < 100; i++)
         {
             StartCoroutine(Backpropagate());
 
         }
-        vNet.Initialize();
+        
     }
 
     IEnumerator Backpropagate()

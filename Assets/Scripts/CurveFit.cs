@@ -13,7 +13,7 @@ static class CurveToFit
 
 public class CurveFit : MonoBehaviour {
 
-    public GameObject VisualNet;
+    public VisualNet VNet;
     public GameObject netPrefab;
     public GameObject curvePrefab;
     public double coordinateScale;
@@ -33,7 +33,7 @@ public class CurveFit : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-
+        
 
         CurvePoints = new GameObject[numPoints];
         for (int i = 0; i < CurvePoints.Length; i++)
@@ -51,6 +51,10 @@ public class CurveFit : MonoBehaviour {
         }
         updateNetPoints();
 
+        VNet.net = net;
+        VNet.Initialize();
+
+        //backpropagation
         for (int i = 0; i < numBackpropagationPasses; i++)
         {
             backpropagate();
@@ -70,6 +74,7 @@ public class CurveFit : MonoBehaviour {
                 double x = min + j * ((max - min) / numPoints);
                 double y = CurveToFit.Function(x);
                 net = net.Backpropagate(new double[] { x }, new double[] { y });
+                VNet.net = net;
                 updateNetPoints();
             }
         }
