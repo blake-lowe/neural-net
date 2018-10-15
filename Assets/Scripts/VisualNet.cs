@@ -28,7 +28,7 @@ public class VisualNet : MonoBehaviour {
         nodes = new GameObject[net.NumHiddenLayers + 1, net.HiddenLayerSize];
 
         //fill array and set positions of prefabs
-        for (int i = 0; i < nodes.GetLength(0); i++)
+        for (int i = 0; i < nodes.GetLength(0) - 1; i++)//hidden layers
         {
             for (int j = 0; j < nodes.GetLength(1); j++)
             {
@@ -36,10 +36,29 @@ public class VisualNet : MonoBehaviour {
                 nodes[i, j] = Instantiate(nodePrefab, position, Quaternion.identity, nodeParent.GetComponent<Transform>());
             }
         }
+        for (int j = 0; j < net.NumOutputs; j++)//output layer
+        {
+            int i = nodes.GetLength(0) - 1;
+            Vector3 position = new Vector3(origin.x + layerSeparation * (i + 1), origin.y + nodeSeparation * j, origin.z);
+            nodes[i, j] = Instantiate(nodePrefab, position, Quaternion.identity, nodeParent.GetComponent<Transform>());
+        }
         //instantiate array
         weights = new GameObject[net.NumHiddenLayers + 1, net.HiddenLayerSize, net.HiddenLayerSize + 1];
         //fill array and set position vectors of lineRenderers
-        for (int i = 0; i < weights.GetLength(0); i++)
+        for (int j = 0; j < weights.GetLength(1); j++)//first hidden layer
+        {
+            for (int k = 0; k < net.NumInputs + 1; k++)
+            {
+                int i = 0;
+                Vector3 position0 = new Vector3(origin.x + layerSeparation * (i + 1), origin.y + nodeSeparation * j, origin.z);//node
+                Vector3 position1 = new Vector3(origin.x + layerSeparation * i, origin.y + nodeSeparation * k, origin.z);//node previous
+                weights[i, j, k] = Instantiate(weightPrefab, weightParent.GetComponent<Transform>());
+                LineRenderer lr = weights[i, j, k].GetComponent<LineRenderer>();
+                lr.SetPosition(0, position0);
+                lr.SetPosition(1, position1);
+            }
+        }
+        for (int i = 1; i < weights.GetLength(0) - 1; i++)//rest of hidden layers
         {
             for (int j = 0; j < weights.GetLength(1); j++)
             {
@@ -54,22 +73,54 @@ public class VisualNet : MonoBehaviour {
                 }
             }
         }
+        for (int j = 0; j < net.NumOutputs; j++)//output layer
+        {
+            for (int k = 0; k < weights.GetLength(2); k++)
+            {
+                int i = weights.GetLength(0) - 1;
+                Vector3 position0 = new Vector3(origin.x + layerSeparation * (i + 1), origin.y + nodeSeparation * j, origin.z);//node
+                Vector3 position1 = new Vector3(origin.x + layerSeparation * i, origin.y + nodeSeparation * k, origin.z);//node previous
+                weights[i, j, k] = Instantiate(weightPrefab, weightParent.GetComponent<Transform>());
+                LineRenderer lr = weights[i, j, k].GetComponent<LineRenderer>();
+                lr.SetPosition(0, position0);
+                lr.SetPosition(1, position1);
+            }
+        }
         isVNetInitialized = true;
     }
     // Update is called once per frame
     void Update () {//set colors
         if (net != null && isVNetInitialized)
         {
-            for (int i = 0; i < nodes.GetLength(0); i++)
+            //node colors
+            for (int i = 0; i < nodes.GetLength(0) - 1; i++)//hidden layers
             {
                 for (int j = 0; j < nodes.GetLength(1); j++)
                 {
-                    double value = net.Layers[i].Values[j];//grab value//error here due to output layer having fewer values (to fix. change all loops to skip output layer and don't even fill the array with prefabs in the first place
+                    double value = net.Layers[i].Values[j];//grab value
                     Color colorValue = Helper.InterpolateColor(Color0, Color1, value);//calculate color
                     nodes[i, j].GetComponent<Renderer>().material.SetColor("_Color", colorValue);//set color of material
                 }
             }
-            for (int i = 0; i < weights.GetLength(0); i++)
+            for (int j = 0; j < net.NumOutputs; j++)//output layer
+            {
+                int i = nodes.GetLength(0) - 1;
+                double value = net.Layers[i].Values[j];//grab value
+                Color colorValue = Helper.InterpolateColor(Color0, Color1, value);//calculate color
+                nodes[i, j].GetComponent<Renderer>().material.SetColor("_Color", colorValue);//set color of material
+            }
+            //weight colors
+            for (int j = 0; j < weights.GetLength(1); j++)//first hidden layer
+            {
+                for (int k = 0; k < net.NumInputs + 1; k++)
+                {
+                    int i = 0;
+                    double weight = net.Layers[i].Weights[j, k];//grab weight
+                    Color colorWeight = Helper.InterpolateColor(Color0, Color1, weight);//calculate color
+                    weights[i, j, k].GetComponent<LineRenderer>().material.SetColor("_Color", colorWeight);
+                }
+            }
+            for (int i = 1; i < weights.GetLength(0) - 1; i++)//rest of hidden layers
             {
                 for (int j = 0; j < weights.GetLength(1); j++)
                 {
@@ -79,6 +130,16 @@ public class VisualNet : MonoBehaviour {
                         Color colorWeight = Helper.InterpolateColor(Color0, Color1, weight);//calculate color
                         weights[i, j, k].GetComponent<LineRenderer>().material.SetColor("_Color", colorWeight);
                     }
+                }
+            }
+            for (int j = 0; j < net.NumOutputs; j++)//output layer
+            {
+                for (int k = 0; k < weights.GetLength(2); k++)
+                {
+                    int i = weights.GetLength(0) - 1;
+                    double weight = net.Layers[i].Weights[j, k];//grab weight
+                    Color colorWeight = Helper.InterpolateColor(Color0, Color1, weight);//calculate color
+                    weights[i, j, k].GetComponent<LineRenderer>().material.SetColor("_Color", colorWeight);
                 }
             }
         }
