@@ -113,6 +113,7 @@ public class NeuralNet
             for (int j = 0; j < hiddenLayerSize + 1; j++)
             {
                 updatedWeights[i, j] = layers[layers.Length - 1].Weights[i, j] + learningRate*deltaWeights[i, j];
+                //updatedWeights[i, j] = Functions.Sigmoid(updatedWeights[i, j]);
             }
         }
         updatedLayers[updatedLayers.Length - 1] = new Layer(hiddenLayerSize, numOutputs, updatedWeights);
@@ -126,6 +127,7 @@ public class NeuralNet
                 for (int j = 0; j < hiddenLayerSize; j++)
                 {
                     updatedWeights[i, j] = layers[hiddenLayerIndex].Weights[i, j] + learningRate*deltaWeights[i, j];
+                    //updatedWeights[i, j] = Functions.Sigmoid(updatedWeights[i, j]);
                 }
             }
             updatedLayers[hiddenLayerIndex] = new Layer(hiddenLayerSize, hiddenLayerSize, updatedWeights);
@@ -138,6 +140,7 @@ public class NeuralNet
             for (int j = 0; j < numInputs; j++)
             {
                 updatedWeights[i, j] = layers[0].Weights[i, j] + learningRate*deltaWeights[i, j];
+                //updatedWeights[i, j] = Functions.Sigmoid(updatedWeights[i, j]);
             }
         }
         updatedLayers[0] = new Layer(numInputs, hiddenLayerSize, updatedWeights);

@@ -130,18 +130,18 @@ public class Layer
         {
             for (int j = 0; j < NumNodesPrevious + 1; j++)  //iterate once per weight and +1 for bias
             {
-                deltaWeights[i, j] = targets[i] - values[i];
+                deltaWeights[i, j] = (targets[i] - values[i]) * Functions.SigmoidDeritive(values[i]);
             }
         }
         return deltaWeights;
     }
 
-    public double[,] BackpropagateHidden(double[,] errorValues, double[,] weightsAfter)
-                                                        //returns array weight error values. Does not change weights
-                                                        //use only for the hidden layers
-                                                        //weightsAfter is the weights of the layer one step after this in the FeedForward direction
-                                                        //errors must have same dimensions as weights. 
-                                                        //will be called with the output of BackpropagateOutput() or BackpropagateHidden()
+    public double[,] BackpropagateHidden(double[,] errorValues, double[,] weightsAfter)//error here that's not how to backpropagate https://machinelearningmastery.com/implement-backpropagation-algorithm-scratch-python/
+                                                                                       //returns array weight error values. Does not change weights
+                                                                                       //use only for the hidden layers
+                                                                                       //weightsAfter is the weights of the layer one step after this in the FeedForward direction
+                                                                                       //errors must have same dimensions as weights. 
+                                                                                       //will be called with the output of BackpropagateOutput() or BackpropagateHidden()
     {
         double[,] deltaWeights = new double[weights.GetLength(0), weights.GetLength(1)];//same size as weights
         for (int i = 0; i < weightsAfter.GetLength(0); i++)//iterate once per node
