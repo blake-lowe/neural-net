@@ -100,6 +100,7 @@ public class VisualNet : MonoBehaviour {
                     double value = net.Layers[i].Values[j];//grab value
                     Color colorValue = Helper.InterpolateColor(Color0, Color1, value);//calculate color
                     nodes[i, j].GetComponent<Renderer>().material.SetColor("_Color", colorValue);//set color of material
+                    nodes[i, j].GetComponent<FloatDisplay>().n = (float)value;
                 }
             }
             for (int j = 0; j < net.NumOutputs; j++)//output layer
@@ -108,6 +109,7 @@ public class VisualNet : MonoBehaviour {
                 double value = net.Layers[i].Values[j];//grab value
                 Color colorValue = Helper.InterpolateColor(Color0, Color1, value);//calculate color
                 nodes[i, j].GetComponent<Renderer>().material.SetColor("_Color", colorValue);//set color of material
+                nodes[i,j].GetComponent<FloatDisplay>().n = (float)value;
             }
             //weight colors
             for (int j = 0; j < weights.GetLength(1); j++)//first hidden layer
@@ -118,6 +120,7 @@ public class VisualNet : MonoBehaviour {
                     double weight = net.Layers[i].Weights[j, k];//grab weight
                     Color colorWeight = Helper.InterpolateColor(Color0, Color1, weight);//calculate color
                     weights[i, j, k].GetComponent<LineRenderer>().material.SetColor("_Color", colorWeight);
+                    weights[i,j,k].GetComponent<FloatDisplay>().n = (float)weight;
                 }
             }
             for (int i = 1; i < weights.GetLength(0) - 1; i++)//rest of hidden layers
@@ -129,6 +132,7 @@ public class VisualNet : MonoBehaviour {
                         double weight = net.Layers[i].Weights[j, k];//grab weight
                         Color colorWeight = Helper.InterpolateColor(Color0, Color1, weight);//calculate color
                         weights[i, j, k].GetComponent<LineRenderer>().material.SetColor("_Color", colorWeight);
+                        weights[i, j, k].GetComponent<FloatDisplay>().n = (float)weight;
                     }
                 }
             }
@@ -140,6 +144,7 @@ public class VisualNet : MonoBehaviour {
                     double weight = net.Layers[i].Weights[j, k];//grab weight
                     Color colorWeight = Helper.InterpolateColor(Color0, Color1, weight);//calculate color
                     weights[i, j, k].GetComponent<LineRenderer>().material.SetColor("_Color", colorWeight);
+                    weights[i, j, k].GetComponent<FloatDisplay>().n = (float)weight;
                 }
             }
         }
