@@ -126,11 +126,15 @@ public class Layer
                                                         //targets must have length equal to numNodes
     {
         double[,] deltaWeights = new double[weights.GetLength(0), weights.GetLength(1)];//same size as weights
+        for (int i = 0; i < numNodes; i++)
+        {
+            deltaWeights[i, 0] = (targets[i] - values[i]) * Functions.SigmoidDeritive(values[i]);
+        }
         for (int i = 0; i < numNodes; i++)              
         {
-            for (int j = 0; j < NumNodesPrevious + 1; j++)  //iterate once per weight and +1 for bias
+            for (int j = 1; j < NumNodesPrevious + 1; j++)  //iterate once per weight and +1 for bias
             {
-                deltaWeights[i, j] = (targets[i] - values[i]) * Functions.SigmoidDeritive(values[i]);
+                deltaWeights[i, j] = (targets[i] - values[i]) * Functions.SigmoidDeritive(values[i]);//missing a coefficient
             }
         }
         return deltaWeights;
@@ -152,7 +156,7 @@ public class Layer
             {
                 sum += errorValues[i, k] * weightsAfter[i, k];
             }
-            double deltaWeight = Functions.SigmoidDeritive(values[i])* sum;
+            double deltaWeight = sum * Functions.SigmoidDeritive(values[i]);
             //assign error values to deltaWeights
             for (int j = 0; j < NumNodesPrevious + 1; j++)  //iterate once per weight per node and +1 for bias
             {

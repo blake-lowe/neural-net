@@ -6,7 +6,7 @@ static class CurveToFit
 {
     public static double Function(double x)
     {
-        double y = Mathf.Pow((float) x,2);                           //change function here
+        double y = x;                           //change function here
         return (double) y;
     }
 }
