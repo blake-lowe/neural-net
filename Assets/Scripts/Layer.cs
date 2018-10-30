@@ -140,8 +140,8 @@ public class Layer
         return deltaWeights;
     }
 
-    public double[,] BackpropagateHidden(double[,] errorValues, double[,] weightsAfter)//error here that's not how to backpropagate https://machinelearningmastery.com/implement-backpropagation-algorithm-scratch-python/
-                                                                                       //returns array weight error values. Does not change weights
+    public double[,] BackpropagateHidden(double[,] errorValues, double[,] weightsAfter)//error here that's not how to backpropagate //https://machinelearningmastery.com/implement-backpropagation-algorithm-scratch-python/
+                                                                                       //returns array weight error values. Does not change weights https://brilliant.org/wiki/backpropagation/
                                                                                        //use only for the hidden layers
                                                                                        //weightsAfter is the weights of the layer one step after this in the FeedForward direction
                                                                                        //errors must have same dimensions as weights. 
