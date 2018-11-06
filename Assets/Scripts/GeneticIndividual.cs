@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneticIndividual : MonoBehaviour {
+public interface GeneticIndividual<T>
+{
+    double fitness();//return how fit the individual is
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    IList<T> reproduce(IList<T> parents, int crossoverPoints, int numChildren);//take an array of individuals and return an array of children
+
+    T mutate();//change a bit of the genes
 }
