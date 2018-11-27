@@ -179,7 +179,8 @@ public class NeuralNet:IGeneticIndividual
 
     public void Mutate()
     {
-        throw new NotImplementedException();
+        int i = (int)(RandHolder.NextDouble()*(numHiddenLayers + 1));//layer to mutate
+        //todo
     }
 
     public int CompareTo(IGeneticIndividual individual)
