@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class NeuralNet
+public class NeuralNet:IGeneticIndividual
 {
     int numInputs;          //number of nodes in the input layer of the net
     int numOutputs;         //number of nodes in the output layer of the net
@@ -10,6 +10,9 @@ public class NeuralNet
     int hiddenLayerSize;    //the number of nodes in each hidden layer //DOES NOT SUPPORT VARYING HIDDEN LAYER SIZES// although I don't see why not(8/29)
     double learningRate;       //factor to multiply deltaweights by during backpropagation
     Layer[] layers; //including hidden layers and output layers but not input layer. Logic works by attaching a set of weights to before a layer.
+    public double numTrainingSets;
+    public double[] TrainingInputs;
+    public double[] TrainingOutputs;
 
     public Layer[] Layers
     {
@@ -148,5 +151,44 @@ public class NeuralNet
         NeuralNet updatedNet = new NeuralNet(numInputs, numOutputs, numHiddenLayers, hiddenLayerSize, learningRate);
         updatedNet.layers = updatedLayers;
         return updatedNet;
+    }
+
+    public double Fitness()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Randomize()
+    {
+        //randomize layers
+        layers = new Layer[numHiddenLayers + 1];    //+1 for output layer
+        //assign first term (different because must fit into the input layer)
+        layers[0] = new Layer(numInputs, hiddenLayerSize);
+        for (int i = 1; i < layers.Length - 1; i++)
+        {
+            layers[i] = new Layer(hiddenLayerSize, hiddenLayerSize);
+        }
+        //assign last term (output Layer)
+        layers[layers.Length - 1] = new Layer(hiddenLayerSize, numOutputs);
+    }
+
+    public IGeneticIndividual[] Reproduce(IGeneticIndividual[] parents, int crossoverPoints, int numChildren)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Mutate()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int CompareTo(IGeneticIndividual individual)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int CompareTo(object obj)
+    {
+        throw new NotImplementedException();
     }
 }
