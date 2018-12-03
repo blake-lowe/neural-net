@@ -28,7 +28,7 @@ public class GeneticAlgorithm {
     {
         for (int i = 0; i < individuals.Length; i++)
         {
-            individuals[i] = individuals[i].Randomize();
+            individuals[i].Randomize();
         }
     }
 
@@ -41,7 +41,7 @@ public class GeneticAlgorithm {
     {
         for (int i = 0; i < numGenerations; i++)
         {
-            //one iteration
+            //one iteration TODO
         }
         return individuals[0];//the highest fitness
     }

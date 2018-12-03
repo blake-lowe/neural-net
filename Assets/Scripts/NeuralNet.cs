@@ -155,7 +155,7 @@ public class NeuralNet:IGeneticIndividual
 
     public double Fitness()
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException();//todo
     }
 
     public void Randomize()
@@ -174,21 +174,60 @@ public class NeuralNet:IGeneticIndividual
 
     public IGeneticIndividual[] Reproduce(IGeneticIndividual[] parents, int crossoverPoints, int numChildren)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException();//todo
     }
 
-    public void Mutate()
+    public void Mutate()//set a single random weight to a value from 0 to 1
     {
-        int i = (int)(RandHolder.NextDouble()*(numHiddenLayers + 1));//layer to mutate
-        //todo
+        //layer to mutate//
+        int i = (int)(RandHolder.NextDouble()*(numHiddenLayers + 1));//+1 for output
+        //node to mutate//
+        int j = -1;//should cause an index out of bounds if not set by subsequent if cases
+        if (i == 0) {//if first hidden layer (same as else case)(same number of nodes as hidden layer so doesn't matter)
+            j = (int)(RandHolder.NextDouble() * hiddenLayerSize);
+        }
+        else if (i == numHiddenLayers) {//if output layer
+            j = (int)(RandHolder.NextDouble() * numOutputs);
+        }
+        else {//if any other hidden layer
+            j = (int)(RandHolder.NextDouble() * hiddenLayerSize);
+        }
+        //weight to mutate//
+        int k = -1;//should cause an index out of bounds if not set by subsequent if cases
+        if (i == 0)//if first hidden layer (same as else case)(same number of nodes as hidden layer so doesn't matter)
+        {
+            k = (int)(RandHolder.NextDouble() * numInputs);
+        }
+        else if (i == numHiddenLayers)//if output layer same as else case
+        {
+            k = (int)(RandHolder.NextDouble() * hiddenLayerSize);
+        }
+        else//if any other hidden layer
+        {
+            k = (int)(RandHolder.NextDouble() * hiddenLayerSize);
+        }
+        //set new value;
+        double newValue = RandHolder.NextDouble();
+        Layers[i].Weights[j, k] = newValue;
     }
 
-    public int CompareTo(IGeneticIndividual individual)
+    public int CompareTo(IGeneticIndividual obj)//to be used by Arrays.sort in GeneticAlgorithm.cs>FitnessSort()
     {
-        throw new NotImplementedException();
+        if(this.Fitness()>obj.Fitness())
+        {
+            return -1;//precede in sort order
+        }
+        else if(this.Fitness() < obj.Fitness())
+        {
+            return 1;//succeed in sort order
+        }
+        else
+        {
+            return 0;//equal in sort
+        }
     }
 
-    public int CompareTo(object obj)
+    public int CompareTo(object obj)//should never be called because should never be compared to other data types
     {
         throw new NotImplementedException();
     }
