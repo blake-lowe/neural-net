@@ -148,8 +148,10 @@ public class NeuralNet:IGeneticIndividual
         }
         updatedLayers[0] = new Layer(numInputs, hiddenLayerSize, updatedWeights);
 
-        NeuralNet updatedNet = new NeuralNet(numInputs, numOutputs, numHiddenLayers, hiddenLayerSize, learningRate);
-        updatedNet.layers = updatedLayers;
+        NeuralNet updatedNet = new NeuralNet(numInputs, numOutputs, numHiddenLayers, hiddenLayerSize, learningRate)
+        {
+            layers = updatedLayers
+        };
         return updatedNet;
     }
 
@@ -196,9 +198,158 @@ public class NeuralNet:IGeneticIndividual
         layers[layers.Length - 1] = new Layer(hiddenLayerSize, numOutputs);
     }
 
-    public IGeneticIndividual[] Reproduce(IGeneticIndividual[] parents, int crossoverPoints, int numChildren)
+    public NeuralNet[] Reproduce(NeuralNet[] parents, int numCrossoverPoints, int numChildren)  //returns an array of nets given an array of all parents. Doesn't necessarily need to be called by one of the parents but that's probably convenient. 
+                                                                                                //numCrossover points SHOULD be > numParents-1 (to use all parents at least once), but it's fine if not
     {
-        throw new NotImplementedException();//todo
+        int numParents = parents.Length;//convenient variable to have
+        NeuralNet[] children = new NeuralNet[numChildren];//variable to hold generated children. Will be output by method
+        for (int childIter = 0; childIter < numChildren; childIter++)//iterate once for each child to be generated
+        {
+            //generate random crossoverPoints
+            int[,] crossoverPoints = new int[numCrossoverPoints, 3];//3 because (i, j, k) are (layer, node, weight)
+            for (int cpIter = 0; cpIter < numCrossoverPoints; cpIter++)//iterate for each crossover point and generate it. Code copied from Mutate()
+            {
+                //layer to cp//
+                int i = (int)(RandHolder.NextDouble() * (parents[0].numHiddenLayers + 1));//+1 for output
+                //node to cp//
+                int j = -1;//should cause an index out of bounds if not set by subsequent if cases
+                if (i == 0)
+                {//if first hidden layer (same as else case)(same number of nodes as hidden layer so doesn't matter)
+                    j = (int)(RandHolder.NextDouble() * parents[0].hiddenLayerSize);
+                }
+                else if (i == parents[0].numHiddenLayers)
+                {//if output layer
+                    j = (int)(RandHolder.NextDouble() * parents[0].numOutputs);
+                }
+                else
+                {//if any other hidden layer
+                    j = (int)(RandHolder.NextDouble() * parents[0].hiddenLayerSize);
+                }
+                //weight to cp//
+                int k = -1;//should cause an index out of bounds if not set by subsequent if cases
+                if (i == 0)//if first hidden layer (same as else case)(same number of nodes as hidden layer so doesn't matter)
+                {
+                    k = (int)(RandHolder.NextDouble() * (parents[0].numInputs) + 1);//+1 for bias
+                }
+                else if (i == parents[0].numHiddenLayers)//if output layer same as else case
+                {
+                    k = (int)(RandHolder.NextDouble() * (parents[0].hiddenLayerSize) + 1);//+1 for bias
+                }
+                else//if any other hidden layer
+                {
+                    k = (int)(RandHolder.NextDouble() * (parents[0].hiddenLayerSize) + 1);//+1 for bias
+                }
+
+                //assign i,j,k to crossoverPoints
+                crossoverPoints[cpIter, 0] = i;
+                crossoverPoints[cpIter, 1] = j;
+                crossoverPoints[cpIter, 2] = k;//duplicate crossover points might exist but honestly who cares
+            }
+            //create array to hold new layers, nodes, weights
+            Layer[] newLayers = new Layer[parents[0].numHiddenLayers + 1];
+
+            //fill newLayers
+            int activeParentIndex = 0;
+
+            for (int i = 0; i < parents[0].numHiddenLayers + 1; i++)
+            {
+                if (i == 0)//first hidden layer
+                {
+                    double[,] newWeights = new double[parents[0].hiddenLayerSize, parents[0].numInputs + 1];//create empty container, +1 for bias
+                    for (int j = 0; j < newWeights.GetLength(0); j++)
+                    {
+                        for (int k = 0; k < newWeights.GetLength(1); k++)//this will run for each weight and bias
+                        {
+                            //check if currently at a crossover point if so then swap the activeParentIndex
+                            for (int iter = 0; iter < numCrossoverPoints; iter++)//check for each crossover point
+                            {
+                                if (crossoverPoints[iter, 0] == i && crossoverPoints[iter, 1] == j && crossoverPoints[iter, 2] == k)
+                                {
+                                    int temp = (int)(RandHolder.NextDouble() * (numParents - 1));//the minus one is because we are avoiding the current activeParentIndex in this reassignment
+                                    if (temp < activeParentIndex)
+                                    {
+                                        activeParentIndex = temp;
+                                    }
+                                    else//if greater than or equal to activeParentIndex
+                                    {
+                                        activeParentIndex = temp + 1;
+                                    }
+                                }
+                            }
+                            newWeights[j, k] = parents[activeParentIndex].layers[i].Weights[j, k];//copy the value from the active aprent
+                        }
+                    }
+                    newLayers[i] = new Layer(parents[0].numInputs, parents[0].hiddenLayerSize, newWeights);//assign new weights to newLayers array in the form of a newly instantiated Layer
+
+                }
+                else if (i > 0 && i < parents[0].numHiddenLayers + 1)//all other hidden layers
+                {
+                    double[,] newWeights = new double[parents[0].hiddenLayerSize, parents[0].hiddenLayerSize + 1];//create empty container, +1 for bias
+                    for (int j = 0; j < newWeights.GetLength(0); j++)
+                    {
+                        for (int k = 0; k < newWeights.GetLength(1); k++)//this will run for each weight and bias
+                        {
+                            //check if currently at a crossover point if so then swap the activeParentIndex
+                            for (int iter = 0; iter < numCrossoverPoints; iter++)//check for each crossover point
+                            {
+                                if (crossoverPoints[iter, 0] == i && crossoverPoints[iter, 1] == j && crossoverPoints[iter, 2] == k)
+                                {
+                                    int temp = (int)(RandHolder.NextDouble() * (numParents - 1));//the minus one is because we are avoiding the current activeParentIndex in this reassignment
+                                    if (temp < activeParentIndex)
+                                    {
+                                        activeParentIndex = temp;
+                                    }
+                                    else//if greater than or equal to activeParentIndex
+                                    {
+                                        activeParentIndex = temp + 1;
+                                    }
+                                }
+                            }
+                            newWeights[j, k] = parents[activeParentIndex].layers[i].Weights[j, k];//copy the value from the active aprent
+                        }
+                    }
+                    newLayers[i] = new Layer(parents[0].numInputs, parents[0].hiddenLayerSize, newWeights);//assign new weights to newLayers array in the form of a newly instantiated Layer
+                }
+                else if(i == parents[0].numHiddenLayers)//output layer
+                {
+                    double[,] newWeights = new double[parents[0].numOutputs, parents[0].hiddenLayerSize + 1];//create empty container, +1 for bias
+                    for (int j = 0; j < newWeights.GetLength(0); j++)
+                    {
+                        for (int k = 0; k < newWeights.GetLength(1); k++)//this will run for each weight and bias
+                        {
+                            //check if currently at a crossover point if so then swap the activeParentIndex
+                            for (int iter = 0; iter < numCrossoverPoints; iter++)//check for each crossover point
+                            {
+                                if (crossoverPoints[iter, 0] == i && crossoverPoints[iter, 1] == j && crossoverPoints[iter, 2] == k)
+                                {
+                                    int temp = (int)(RandHolder.NextDouble() * (numParents - 1));//the minus one is because we are avoiding the current activeParentIndex in this reassignment
+                                    if (temp < activeParentIndex)
+                                    {
+                                        activeParentIndex = temp;
+                                    }
+                                    else//if greater than or equal to activeParentIndex
+                                    {
+                                        activeParentIndex = temp + 1;
+                                    }
+                                }
+                            }
+                            newWeights[j, k] = parents[activeParentIndex].layers[i].Weights[j, k];//copy the value from the active aprent
+                        }
+                    }
+                    newLayers[i] = new Layer(parents[0].numInputs, parents[0].hiddenLayerSize, newWeights);//assign new weights to newLayers array in the form of a newly instantiated Layer
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException();
+                }
+            }
+
+            children[childIter] = new NeuralNet(parents[0].numInputs, parents[0].numOutputs, parents[0].numHiddenLayers, parents[0].hiddenLayerSize, parents[0].learningRate)//create empty with same params as parent
+            {
+                layers = newLayers//assign the data to complete the child
+            };
+        }
+        return children;
     }
 
     public void Mutate()//set a single random weight to a random value from 0 to 1
@@ -220,15 +371,15 @@ public class NeuralNet:IGeneticIndividual
         int k = -1;//should cause an index out of bounds if not set by subsequent if cases
         if (i == 0)//if first hidden layer (same as else case)(same number of nodes as hidden layer so doesn't matter)
         {
-            k = (int)(RandHolder.NextDouble() * numInputs);
+            k = (int)(RandHolder.NextDouble() * (numInputs + 1));//+1 for bias
         }
         else if (i == numHiddenLayers)//if output layer same as else case
         {
-            k = (int)(RandHolder.NextDouble() * hiddenLayerSize);
+            k = (int)(RandHolder.NextDouble() * (hiddenLayerSize) + 1);//+1 for bias
         }
         else//if any other hidden layer
         {
-            k = (int)(RandHolder.NextDouble() * hiddenLayerSize);
+            k = (int)(RandHolder.NextDouble() * (hiddenLayerSize) + 1);//+1 for bias
         }
         //set new value;
         double newValue = RandHolder.NextDouble();
@@ -251,7 +402,7 @@ public class NeuralNet:IGeneticIndividual
         }
     }
 
-    public int CompareTo(object obj)//should never be called because should never be compared to other data types
+    public int CompareTo(object obj)//should never be called because should never be compared to other data types but needs to be here to satisfy compiler
     {
         throw new NotImplementedException();
     }

@@ -48,6 +48,7 @@ public class GeneticAlgorithm {
 
     private IGeneticIndividual TrainFitness(double targetFitness)
     {
+        //todo
         return individuals[0];//the highest fitness
     }
 }
