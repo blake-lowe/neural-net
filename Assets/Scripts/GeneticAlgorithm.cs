@@ -3,16 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneticAlgorithm {
+public class GeneticAlgorithm {//a general class describing a Genetic Algorithm. depending on which type of IGeneticIndividual is used, it will train a different class
 
-    public int populationSize;
-    public int numParents;
-    public float environmentalPressure;//from 0 to 1. 1 is no survivors
-    public int numToKill;
+    public int populationSize;          //total number of individuals
+    public int numParents;              //number of parents per reproduction set
+    public float environmentalPressure; //from 0 to 1. 1 is no survivors
+    private int numToKill;           //filled by constructor
+    public int numToSave;
 
     private IGeneticIndividual[] individuals;
     // Use this for initialization
-    public GeneticAlgorithm(int populationSize, int numParents, float environmentalPressure)
+    public GeneticAlgorithm(IGeneticIndividual progenitor, int populationSize, int numParents, float environmentalPressure)
     {
         this.populationSize = populationSize;
         this.numParents = numParents;
@@ -21,13 +22,14 @@ public class GeneticAlgorithm {
 
 
         individuals = new IGeneticIndividual[populationSize];
-        Initialize();
+        Initialize(progenitor);
     }
 
-    private void Initialize()
+    private void Initialize(IGeneticIndividual progenitor)
     {
         for (int i = 0; i < individuals.Length; i++)
         {
+            individuals[i] = progenitor;
             individuals[i].Randomize();
         }
     }
