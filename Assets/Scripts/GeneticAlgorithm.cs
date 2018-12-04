@@ -9,8 +9,8 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
     public int numParents;              //number of parents per reproduction set
     public float environmentalPressure; //from 0 to 1. 1 is no survivors
     private int numToKill;           //filled by constructor
-    public int numToSave;
-
+    public float eliteFraction;           //number of solutions to save from one generation to the next 0 is none 1 is all saved. (should never be > 1-environmentalPressure then errors) (if > like .2 then GA won't work well)
+    public int numToSave;            //filled by constructor 
     private IGeneticIndividual[] individuals;
     // Use this for initialization
     public GeneticAlgorithm(IGeneticIndividual progenitor, int populationSize, int numParents, float environmentalPressure)
@@ -18,7 +18,9 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
         this.populationSize = populationSize;
         this.numParents = numParents;
         this.environmentalPressure = environmentalPressure;
-        numToKill = (int)(environmentalPressure * populationSize);
+        numToSave = (int)(eliteFraction * populationSize);
+        
+        numToKill = (int)(environmentalPressure * populationSize);//todo this line 
 
 
         individuals = new IGeneticIndividual[populationSize];
