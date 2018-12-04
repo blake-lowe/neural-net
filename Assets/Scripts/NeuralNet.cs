@@ -10,9 +10,9 @@ public class NeuralNet:IGeneticIndividual
     int hiddenLayerSize;    //the number of nodes in each hidden layer //DOES NOT SUPPORT VARYING HIDDEN LAYER SIZES// although I don't see why not(8/29)
     double learningRate;       //factor to multiply deltaweights by during backpropagation
     Layer[] layers; //including hidden layers and output layers but not input layer. Logic works by attaching a set of weights to before a layer.
-    public double numTrainingSets;
-    public double[] TrainingInputs;
-    public double[] TrainingOutputs;
+    public double numTestSets;
+    public double[,] TestInputsSets;//first column is index and the second column is the test set
+    public double[,] TestOutputSets;
 
     public Layer[] Layers
     {
@@ -153,9 +153,33 @@ public class NeuralNet:IGeneticIndividual
         return updatedNet;
     }
 
-    public double Fitness()
+    public double Fitness()//return the average fitness when all test sets are fed through the network. Will return a value between 0 and numOutputs. Low fitness is bad, high fitness is good
     {
-        throw new NotImplementedException();//todo
+        double errorTotal = 0;
+        for (int i = 0; i < numTestSets; i++)//iterate for each test set
+        {
+            double[] TestInputSet = new double[numInputs];//create a temp variable for the input set
+            for (int j = 0; j < numInputs; j++)//fill temp array
+            {
+                TestInputSet[j] = TestInputsSets[i, j];
+            }
+
+            double[] TestOutputSet = new double[numOutputs];//create a temp variable for the output set
+            for (int j = 0; j < numOutputs; j++)//fill temp array
+            {
+                TestOutputSet[j] = TestOutputSets[i, j];
+            }
+
+            double[] TestResult = FeedForward(TestInputSet);//feed forward
+
+            for (int j = 0; j < numOutputs; j++)//compare result to expected result and add to 
+            {
+                double error = Math.Abs(TestOutputSet[j] - TestResult[j]);//abs to keep error positive
+                errorTotal += error;
+            }
+        }
+        double fitness = numOutputs-(errorTotal / numTestSets);//take the average value. should be between 0 and numOutputs
+        return fitness;
     }
 
     public void Randomize()
@@ -177,7 +201,7 @@ public class NeuralNet:IGeneticIndividual
         throw new NotImplementedException();//todo
     }
 
-    public void Mutate()//set a single random weight to a value from 0 to 1
+    public void Mutate()//set a single random weight to a random value from 0 to 1
     {
         //layer to mutate//
         int i = (int)(RandHolder.NextDouble()*(numHiddenLayers + 1));//+1 for output
