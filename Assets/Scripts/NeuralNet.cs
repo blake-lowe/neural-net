@@ -198,10 +198,17 @@ public class NeuralNet:IGeneticIndividual
         layers[layers.Length - 1] = new Layer(hiddenLayerSize, numOutputs);
     }
 
-    public NeuralNet[] Reproduce(NeuralNet[] parents, int numCrossoverPoints, int numChildren)  //returns an array of nets given an array of all parents. Doesn't necessarily need to be called by one of the parents but that's probably convenient. 
+    public IGeneticIndividual[] Reproduce(IGeneticIndividual[] IParents, int numCrossoverPoints, int numChildren)  //returns an array of nets given an array of all parents. 
+                                                                                                // Doesn't necessarily need to be called by one of the parents but that's probably convenient. 
                                                                                                 //numCrossover points SHOULD be > numParents-1 (to use all parents at least once), but it's fine if not
     {
-        int numParents = parents.Length;//convenient variable to have
+        int numParents = IParents.Length;//convenient variable to have
+        //convert array of type IGeneticIndividual to type NeuralNet
+        NeuralNet[] parents = new NeuralNet[numParents];
+        for (int i = 0; i < numParents; i++)
+        {
+            parents[i] = IParents[i] as NeuralNet;
+        }
         NeuralNet[] children = new NeuralNet[numChildren];//variable to hold generated children. Will be output by method
         for (int childIter = 0; childIter < numChildren; childIter++)//iterate once for each child to be generated
         {
@@ -349,7 +356,13 @@ public class NeuralNet:IGeneticIndividual
                 layers = newLayers//assign the data to complete the child
             };
         }
-        return children;
+        //convert array of type NeuralNet to type IGeneticIndividual
+        IGeneticIndividual[] IChildren = new IGeneticIndividual[numChildren];
+        for (int i = 0; i < numChildren; i++)
+        {
+            IChildren[i] = children[i] as IGeneticIndividual;
+        }
+        return IChildren;
     }
 
     public void Mutate()//set a single random weight to a random value from 0 to 1
