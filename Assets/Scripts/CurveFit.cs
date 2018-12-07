@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-static class CurveToFit
+static class CurveToFit//this is the function to approximate
 {
     public static double Function(double x)
     {
@@ -11,7 +11,7 @@ static class CurveToFit
     }
 }
 
-public class CurveFit : MonoBehaviour {
+public class CurveFit : MonoBehaviour {//a class to test backpropagation of NeuralNet by approximating a function defined above.
 
     public VisualNet VNet;
     public GameObject netPrefab;

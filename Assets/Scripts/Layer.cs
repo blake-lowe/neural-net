@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Layer
+public class Layer//a constituent class of NeuralNet. A container specific to the structure of NeuralNets
 {
     private int numNodesPrevious;       //number of nodes in the previous layer
     private int numNodes;               //number of nodes in this layer

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisualNet : MonoBehaviour {
+public class VisualNet : MonoBehaviour {//A unity MonoBehaviour/script designed to visualize the NeuralNet in Unity3D
 
     public Vector3 origin;
     public float layerSeparation;

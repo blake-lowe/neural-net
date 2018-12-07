@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisualNetController : MonoBehaviour
+public class VisualNetController : MonoBehaviour//A test script to create a visual net and call some of the neural net methods.
 {
 
     public VisualNet vNet;
