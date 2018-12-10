@@ -44,7 +44,7 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
         Array.Sort(individuals);//will sort individuals based on fitness because GeneticIndividual and classes which implement GeneticIndividual impelements CompareTo and IComparable
     }
 
-    private void Mutate(int individualIndex)
+    private void Mutate(int individualIndex)//a helper method which calls itself recursively to make mutation truly probabalistic
     {
         if(RandHolder.NextDouble() < mutationChance)
         {
@@ -53,7 +53,7 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
         }
     }
 
-    private IGeneticIndividual TrainGeneration(int numGenerations)//execute a number of iterations of the algorithm creating more fit solutions
+    private IGeneticIndividual TrainGeneration(int numGenerations)//execute a number of iterations of the algorithm creating more fit solutions. Return most fit individual
     {
         for (int i = 0; i < numGenerations; i++)
         {
@@ -94,9 +94,17 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
             {
                     Mutate(mutationIter);
             }
-            //combine elite and children array
-            ////TODO
-            FitnessSort();
+            //combine elite and children array and copy into individuals array
+            for (int eliteIter = 0; eliteIter < eliteIndividuals.Length; eliteIter++)//copy the high fitness individuals that were saved from the previous generation
+            {
+                individuals[eliteIter] = eliteIndividuals[eliteIter];
+            }
+            for (int childIter = 0; childIter < newChildren.Length; childIter++)//copy the newly generated children after the elite individuals
+            {
+                individuals[eliteIndividuals.Length + childIter] = newChildren[childIter];
+            }
+
+            FitnessSort();//order the individuals by fitness
         }
         return individuals[0];//the highest fitness
     }
