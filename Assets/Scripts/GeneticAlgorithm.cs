@@ -16,7 +16,7 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
     public float eliteFraction;           //number of solutions to save from one generation to the next 0 is none 1 is all saved. (should never be > 1-environmentalPressure then errors) (if > like .2 then GA won't work well)
     public int numToSave;            //filled by constructor 
     private int numReproductionPairs;//filled by constructor
-    private IGeneticIndividual[] individuals;//array to hold population
+    public IGeneticIndividual[] individuals;//array to hold population
 
     public GeneticAlgorithm(IGeneticIndividual progenitor, int populationSize, int numParents, float environmentalPressure, float eliteFraction, int numCrossoverPoints, float mutationChance, int tournamentSize)//initialization of arrays and variables
     {

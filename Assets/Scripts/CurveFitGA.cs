@@ -80,7 +80,8 @@ public class CurveFitGA : MonoBehaviour
 
         //training
         ga = new GeneticAlgorithm(net, populationSize, numParents, environmentalPressure, eliteFraction, numCrossoverPoints, mutationChance, tournamentSize);
-        ga.TrainGeneration(numGenerations);
+        net = (NeuralNet)ga.TrainGeneration(numGenerations);
+        updateNetPoints();
     }
 
     // Update is called once per frame

@@ -294,15 +294,7 @@ public class NeuralNet:IGeneticIndividual
                             {
                                 if (crossoverPoints[iter, 0] == i && crossoverPoints[iter, 1] == j && crossoverPoints[iter, 2] == k)
                                 {
-                                    int temp = (int)(RandHolder.NextDouble() * (numParents - 1));//the minus one is because we are avoiding the current activeParentIndex in this reassignment
-                                    if (temp < activeParentIndex)
-                                    {
-                                        activeParentIndex = temp;
-                                    }
-                                    else//if greater than or equal to activeParentIndex
-                                    {
-                                        activeParentIndex = temp + 1;
-                                    }
+                                    activeParentIndex = (int)(RandHolder.NextDouble() * (numParents));//choose a random parent including currently active parent
                                 }
                             }
                             newWeights[j, k] = parents[activeParentIndex].layers[i].Weights[j, k];//copy the value from the active aprent
@@ -334,7 +326,7 @@ public class NeuralNet:IGeneticIndividual
                                     }
                                 }
                             }
-                            newWeights[j, k] = parents[activeParentIndex].layers[i].Weights[j, k];//copy the value from the active aprent
+                            newWeights[j, k] = parents[activeParentIndex].layers[i].Weights[j, k];//copy the value from the active parent
                         }
                     }
                     newLayers[i] = new Layer(parents[0].numInputs, parents[0].hiddenLayerSize, newWeights);//assign new weights to newLayers array in the form of a newly instantiated Layer
@@ -439,6 +431,25 @@ public class NeuralNet:IGeneticIndividual
 
     public int CompareTo(object obj)//should never be called because should never be compared to other data types but needs to be here to satisfy compiler
     {
-        throw new NotImplementedException();
+        if (obj is IGeneticIndividual)
+        {
+            IGeneticIndividual GAObj = (IGeneticIndividual)obj;
+            if (this.Fitness() > GAObj.Fitness())
+            {
+                return -1;//precede in sort order
+            }
+            else if (this.Fitness() < GAObj.Fitness())
+            {
+                return 1;//succeed in sort order
+            }
+            else
+            {
+                return 0;//equal in sort
+            }
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
     }
 }
