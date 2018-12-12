@@ -16,13 +16,18 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
     public float eliteFraction;           //number of solutions to save from one generation to the next 0 is none 1 is all saved. (should never be > 1-environmentalPressure then errors) (if > like .2 then GA won't work well)
     public int numToSave;            //filled by constructor 
     private int numReproductionPairs;//filled by constructor
-    private IGeneticIndividual[] individuals;
+    private IGeneticIndividual[] individuals;//array to hold population
 
-    public GeneticAlgorithm(IGeneticIndividual progenitor, int populationSize, int numParents, float environmentalPressure)//initialization of arrays and variables
+    public GeneticAlgorithm(IGeneticIndividual progenitor, int populationSize, int numParents, float environmentalPressure, float eliteFraction, int numCrossoverPoints, float mutationChance, int tournamentSize)//initialization of arrays and variables
     {
         this.populationSize = populationSize;
         this.numParents = numParents;
         this.environmentalPressure = environmentalPressure;
+        this.eliteFraction = eliteFraction;
+        this.numCrossoverPoints = numCrossoverPoints;
+        this.mutationChance = mutationChance;
+        this.tournamentSize = tournamentSize;
+
         numToSave = (int)(eliteFraction * populationSize);
         numChildrenNeeded = populationSize - numToSave;//each child will have its own set of parents
 
@@ -30,7 +35,7 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
         Initialize(progenitor);
     }
 
-    private void Initialize(IGeneticIndividual progenitor)//randomly decide the aspects of each individual in individuals.
+    private void Initialize(IGeneticIndividual progenitor)//called by constructor//randomly decide the aspects of each individual in individuals.
     {
         for (int i = 0; i < individuals.Length; i++)
         {
@@ -53,7 +58,7 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
         }
     }
 
-    private IGeneticIndividual TrainGeneration(int numGenerations)//execute a number of iterations of the algorithm creating more fit solutions. Return most fit individual
+    public IGeneticIndividual TrainGeneration(int numGenerations)//execute a number of iterations of the algorithm creating more fit solutions. Return most fit individual
     {
         for (int i = 0; i < numGenerations; i++)
         {
@@ -109,7 +114,7 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
         return individuals[0];//the highest fitness
     }
 
-    private IGeneticIndividual TrainFitness(double targetFitness)
+    public IGeneticIndividual TrainFitness(double targetFitness)
     {
         while(individuals[0].Fitness() <= targetFitness)
         {

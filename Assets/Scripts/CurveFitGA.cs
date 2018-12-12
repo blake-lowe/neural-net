@@ -2,35 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-static class CurveToFitGA//this is the function to approximate//TODO
+static class CurveToFitGA//this is the function to approximate
 {
     public static double Function(double x)
     {
-        double y = x;                           //change function here
-        return (double)y;
+        return x;  //change function he
     }
 }
 
 public class CurveFitGA : MonoBehaviour
 {//a class to test backpropagation of NeuralNet by approximating a function defined above.
 
-    public VisualNet VNet;
-    public GameObject netPrefab;
-    public GameObject curvePrefab;
-    public double coordinateScale;
-    public double min;
-    public double max;
-    public int numPoints;
+    public VisualNet VNet;//for visualization
+    public GameObject netPrefab;//an object to create for each point
+    public GameObject curvePrefab;//an object to create for each point
+    public double coordinateScale;//scale factor
+    public double min;      //for the generation of curve points
+    public double max;      //
+    public int numPoints;   //
 
-    public int numHiddenLayers;
-    public int hiddenLayerSize;
-    public double learningRate;//won't affect anything
+    public double testMin;      //for creation of testI/O sets
+    public double testMax;      //
+    public int numTestPoints;   //
+
+    public int numHiddenLayers; //NN dimensions
+    public int hiddenLayerSize; //
 
     public int populationSize;          //total number of individuals
     public int numParents;              //number of parents per reproduction set
     public int numCrossoverPoints;      //number of crossover points in genetic combination. Will be used in GeneticIndividual.Reproduce(). should be x >= numParents.
     public float mutationChance;        //from 0 to 1. measure of genetic diversity. 0 is no mutation. 1 will cause an infinite loop after changing every weight.
     public float environmentalPressure; //from 0 to 1. 1 is no survivors
+    public float eliteFraction;         //number of solutions to save from one generation to the next 0 is none 1 is all saved. (should never be > 1-environmentalPressure then errors) (if > like .2 then GA won't work well)
     public int tournamentSize;          //size of the randomly chosen subset from which the most fit individual will be chosen for reproduction.  must be 1 <= x <= populationSize.
     public int numGenerations;          //how much training to do
     
@@ -39,9 +42,14 @@ public class CurveFitGA : MonoBehaviour
     private GameObject[] NetPoints;
     private NeuralNet net;
 
+    private GeneticAlgorithm ga;
+    private double[,] testInputSets;
+    private double[,] testOutputSets;
+
     // Use this for initialization
     void Start()
     {
+        //create actual curve visualization
         CurvePoints = new GameObject[numPoints];
         for (int i = 0; i < CurvePoints.Length; i++)
         {
@@ -49,8 +57,17 @@ public class CurveFitGA : MonoBehaviour
         }
         updateCurvePoints();
 
-        net = new NeuralNet(1, 1, numHiddenLayers, hiddenLayerSize, learningRate);
+        testInputSets = new double[numTestPoints, 1];
+        testOutputSets = new double[numTestPoints, 1];
+        for (int i = 0; i < numTestPoints; i++)
+        {
+            testInputSets[i, 0] = testMin + i * (testMax - testMin) / numTestPoints;
+            testOutputSets[i, 0] = CurveToFitGA.Function(testInputSets[i, 0]);
+        }
 
+        net = new NeuralNet(1, 1, numHiddenLayers, hiddenLayerSize, testInputSets, testOutputSets);//create net with test sets filled
+
+        //create visualization of the net points
         NetPoints = new GameObject[numPoints];
         for (int i = 0; i < NetPoints.Length; i++)
         {
@@ -62,7 +79,8 @@ public class CurveFitGA : MonoBehaviour
         VNet.Initialize();
 
         //training
-        
+        ga = new GeneticAlgorithm(net, populationSize, numParents, environmentalPressure, eliteFraction, numCrossoverPoints, mutationChance, tournamentSize);
+        ga.TrainGeneration(numGenerations);
     }
 
     // Update is called once per frame
@@ -71,27 +89,12 @@ public class CurveFitGA : MonoBehaviour
 
     }
 
-    void backpropagate()
-    {
-        for (int i = 0; i < 1; i++)
-        {
-            for (int j = 0; j < numPoints; j++)
-            {
-                double x = min + j * ((max - min) / numPoints);
-                double y = CurveToFit.Function(x);
-                net = net.Backpropagate(new double[] { x }, new double[] { y });
-                VNet.net = net;
-                updateNetPoints();
-            }
-        }
-    }
-
     void updateCurvePoints()
     {
         for (int i = 0; i < CurvePoints.Length; i++)
         {
             double x = min + i * ((max - min) / numPoints);
-            double y = CurveToFit.Function(x);
+            double y = CurveToFitGA.Function(x);
             CurvePoints[i].GetComponent<Transform>().position = new Vector3((float)(coordinateScale * x), (float)(coordinateScale * (float)y), 0);
 
         }

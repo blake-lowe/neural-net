@@ -11,7 +11,7 @@ public class NeuralNet:IGeneticIndividual
     double learningRate;       //factor to multiply deltaweights by during backpropagation
     Layer[] layers; //including hidden layers and output layers but not input layer. Logic works by attaching a set of weights to before a layer.
     public double numTestSets;
-    public double[,] TestInputsSets;//first column is index and the second column is the test set
+    public double[,] TestInputSets;//first column is index and the second column is the test set
     public double[,] TestOutputSets;
 
     public Layer[] Layers
@@ -72,7 +72,7 @@ public class NeuralNet:IGeneticIndividual
         }
     }
 
-    public NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int hiddenLayerSize, double learningRate)
+    public NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int hiddenLayerSize, double learningRate)//use this constructor for backpropagation training
     {
         this.numInputs = numInputs;
         this.numOutputs = numOutputs;
@@ -91,6 +91,28 @@ public class NeuralNet:IGeneticIndividual
         //assign last term (output Layer)
         layers[layers.Length - 1] = new Layer(hiddenLayerSize, numOutputs);
         
+    }
+
+    public NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int hiddenLayerSize, double[,] testInputSets, double[,] testOutputSets)//use this constructor for Genetic Algorithm training
+    {
+        this.numInputs = numInputs;
+        this.numOutputs = numOutputs;
+        this.numHiddenLayers = numHiddenLayers;
+        this.hiddenLayerSize = hiddenLayerSize;
+        this.TestInputSets = testInputSets;
+        this.TestOutputSets = testOutputSets;
+
+        //instantiate layers
+        layers = new Layer[numHiddenLayers + 1];    //+1 for output layer
+        //assign first term (different because must fit into the input layer)
+        layers[0] = new Layer(numInputs, hiddenLayerSize);
+        for (int i = 1; i < layers.Length - 1; i++)
+        {
+            layers[i] = new Layer(hiddenLayerSize, hiddenLayerSize);
+        }
+        //assign last term (output Layer)
+        layers[layers.Length - 1] = new Layer(hiddenLayerSize, numOutputs);
+
     }
 
     public double[] FeedForward(double[] inputValues) //inputValues.Length must equal numInputs //will return double[] with length = numOutputs
