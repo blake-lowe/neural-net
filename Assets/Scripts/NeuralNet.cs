@@ -185,7 +185,7 @@ public class NeuralNet:IGeneticIndividual
             double[] TestInputSet = new double[numInputs];//create a temp variable for the input set
             for (int j = 0; j < numInputs; j++)//fill temp array
             {
-                TestInputSet[j] = TestInputsSets[i, j];
+                TestInputSet[j] = TestInputSets[i, j];
             }
 
             double[] TestOutputSet = new double[numOutputs];//create a temp variable for the output set
