@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Layer//a constituent class of NeuralNet. A container specific to the structure of NeuralNets
 {
@@ -96,16 +97,17 @@ public class Layer//a constituent class of NeuralNet. A container specific to th
     public double[] FeedForward(double[] previousValues)
     {
         double sum = 0;                                     //temporary summation variable
-        for (int i = 0; i < NumNodes; i++)              //iterate once per value to be calculated
+        for (int m = 0; m < NumNodes; m++)              //iterate once per value to be calculated
         {
             sum = 0;
-            sum += weights[i, 0];                       //add bias
+            Debug.Log(m);
+            sum += weights[m, 0];                       //add bias
             for (int j = 1; j < NumNodesPrevious + 1; j++)  //iterate once per weight
             {
-                sum += weights[i, j] * previousValues[j-1];
+                sum += weights[m, j] * previousValues[j-1];
             }
             sum = Functions.Sigmoid(sum);    //normalize values between 0 and 1
-            values[i] = sum;
+            values[m] = sum;
         }
         return values;
     }

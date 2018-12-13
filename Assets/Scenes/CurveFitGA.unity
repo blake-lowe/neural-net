@@ -256,6 +256,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &990507122
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 990507123}
+  m_Layer: 0
+  m_Name: Nodes Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &990507123
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 990507122}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1792554156}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1764534152
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,26 +312,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 416918b7f57d00743ac2278363162064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VNet: {fileID: 0}
-  netPrefab: {fileID: 0}
-  curvePrefab: {fileID: 0}
-  coordinateScale: 0
+  VNet: {fileID: 1764534155}
+  netPrefab: {fileID: 1255778331486242, guid: e870c62443a1faf43963edfbbc893e41, type: 2}
+  curvePrefab: {fileID: 1255778331486242, guid: e870c62443a1faf43963edfbbc893e41,
+    type: 2}
+  coordinateScale: 1
   min: 0
-  max: 0
-  numPoints: 0
+  max: 10
+  numPoints: 20
   testMin: 0
-  testMax: 0
-  numTestPoints: 0
-  numHiddenLayers: 0
-  hiddenLayerSize: 0
-  populationSize: 0
-  numParents: 0
-  numCrossoverPoints: 0
-  mutationChance: 0
-  environmentalPressure: 0
-  eliteFraction: 0
-  tournamentSize: 0
-  numGenerations: 0
+  testMax: 10
+  numTestPoints: 10
+  numHiddenLayers: 1
+  hiddenLayerSize: 3
+  populationSize: 100
+  numParents: 2
+  numCrossoverPoints: 1
+  mutationChance: 0.1
+  environmentalPressure: 0.5
+  eliteFraction: 0.1
+  tournamentSize: 2
+  numGenerations: 10
 --- !u!4 &1764534154
 Transform:
   m_ObjectHideFlags: 0
@@ -331,10 +360,68 @@ MonoBehaviour:
   origin: {x: 11, y: 0, z: 0}
   layerSeparation: 2
   nodeSeparation: 2
-  nodeParent: {fileID: 0}
-  weightParent: {fileID: 0}
+  nodeParent: {fileID: 990507122}
+  weightParent: {fileID: 1956200547}
   nodePrefab: {fileID: 1624237995686652, guid: d4c7aab4a802bc94c8abfe8a879da792, type: 2}
   weightPrefab: {fileID: 1834378584830746, guid: 7c030cf7a6772274394f4fa52638250e,
     type: 2}
   Color0: {r: 0, g: 0, b: 0, a: 0}
   Color1: {r: 1, g: 1, b: 1, a: 0}
+--- !u!1 &1792554155
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1792554156}
+  m_Layer: 0
+  m_Name: VNET
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1792554156
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1792554155}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.6159377, y: 4.4746523, z: -7.5878544}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1956200548}
+  - {fileID: 990507123}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1956200547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1956200548}
+  m_Layer: 0
+  m_Name: Weights Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1956200548
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1956200547}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1792554156}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
