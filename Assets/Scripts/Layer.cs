@@ -95,14 +95,14 @@ public class Layer//a constituent class of NeuralNet. A container specific to th
 
     public double[] FeedForward(double[] previousValues)
     {
-        double sum;                                     //temporary summation variable
+        double sum = 0;                                     //temporary summation variable
         for (int i = 0; i < NumNodes; i++)              //iterate once per value to be calculated
         {
             sum = 0;
             sum += weights[i, 0];                       //add bias
-            for (int j = 1; j < NumNodesPrevious; j++)  //iterate once per weight
+            for (int j = 1; j < NumNodesPrevious + 1; j++)  //iterate once per weight
             {
-                sum += weights[i, j] * previousValues[j];
+                sum += weights[i, j] * previousValues[j-1];
             }
             sum = Functions.Sigmoid(sum);    //normalize values between 0 and 1
             values[i] = sum;

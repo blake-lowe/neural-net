@@ -280,7 +280,7 @@ public class NeuralNet:IGeneticIndividual
             //fill newLayers
             int activeParentIndex = 0;
 
-            for (int i = 0; i < parents[0].numHiddenLayers + 1; i++)
+            for (int i = 0; i < parents[0].numHiddenLayers + 1; i++)//+1 for output layer
             {
                 if (i == 0)//first hidden layer
                 {
@@ -303,7 +303,7 @@ public class NeuralNet:IGeneticIndividual
                     newLayers[i] = new Layer(parents[0].numInputs, parents[0].hiddenLayerSize, newWeights);//assign new weights to newLayers array in the form of a newly instantiated Layer
 
                 }
-                else if (i > 0 && i < parents[0].numHiddenLayers + 1)//all other hidden layers
+                else if (i > 0 && i < parents[0].numHiddenLayers)//all other hidden layers
                 {
                     double[,] newWeights = new double[parents[0].hiddenLayerSize, parents[0].hiddenLayerSize + 1];//create empty container, +1 for bias
                     for (int j = 0; j < newWeights.GetLength(0); j++)
