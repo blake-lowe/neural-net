@@ -99,6 +99,7 @@ public class NeuralNet:IGeneticIndividual
         this.numOutputs = numOutputs;
         this.numHiddenLayers = numHiddenLayers;
         this.hiddenLayerSize = hiddenLayerSize;
+        this.numTestSets = testInputSets.GetLength(0);
         this.TestInputSets = testInputSets;
         this.TestOutputSets = testOutputSets;
 
@@ -202,7 +203,7 @@ public class NeuralNet:IGeneticIndividual
                 errorTotal += error;
             }
         }
-        double fitness = numOutputs-(errorTotal / numTestSets);//take the average value. should be between 0 and numOutputs
+        double fitness = -(errorTotal / numTestSets);//take the average value. should be below zero. Close to zero is good
         return fitness;
     }
 
@@ -365,7 +366,7 @@ public class NeuralNet:IGeneticIndividual
                 }
             }
 
-            children[childIter] = new NeuralNet(parents[0].numInputs, parents[0].numOutputs, parents[0].numHiddenLayers, parents[0].hiddenLayerSize, parents[0].learningRate)//create empty with same params as parent
+            children[childIter] = new NeuralNet(parents[0].numInputs, parents[0].numOutputs, parents[0].numHiddenLayers, parents[0].hiddenLayerSize, parents[0].TestInputSets, parents[0].TestOutputSets)//create empty with same params as parent
             {
                 layers = newLayers//assign the data to complete the child
             };

@@ -11,7 +11,7 @@ static class CurveToFitGA//this is the function to approximate
 }
 
 public class CurveFitGA : MonoBehaviour
-{//a class to test backpropagation of NeuralNet by approximating a function defined above.
+{//a class to test training with a GeneticAlgorithm of NeuralNet by approximating a function defined above.
 
     public VisualNet VNet;//for visualization
     public GameObject netPrefab;//an object to create for each point
@@ -110,8 +110,6 @@ public class CurveFitGA : MonoBehaviour
             inputs[0] = x;
             double[] outputs = net.FeedForward(inputs);
             double y = outputs[0];
-            //Debug.Log(x);
-            //Debug.Log(y);
             NetPoints[i].GetComponent<Transform>().position = new Vector3((float)(coordinateScale * x), (float)(coordinateScale * (float)y), 0);
         }
     }
