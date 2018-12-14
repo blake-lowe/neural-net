@@ -100,7 +100,6 @@ public class Layer//a constituent class of NeuralNet. A container specific to th
         for (int m = 0; m < NumNodes; m++)              //iterate once per value to be calculated
         {
             sum = 0;
-            Debug.Log(m);
             sum += weights[m, 0];                       //add bias
             for (int j = 1; j < NumNodesPrevious + 1; j++)  //iterate once per weight
             {

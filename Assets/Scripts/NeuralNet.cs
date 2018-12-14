@@ -357,7 +357,7 @@ public class NeuralNet:IGeneticIndividual
                             newWeights[j, k] = parents[activeParentIndex].layers[i].Weights[j, k];//copy the value from the active aprent
                         }
                     }
-                    newLayers[i] = new Layer(parents[0].numInputs, parents[0].hiddenLayerSize, newWeights);//assign new weights to newLayers array in the form of a newly instantiated Layer
+                    newLayers[i] = new Layer(parents[0].hiddenLayerSize, parents[0].numOutputs, newWeights);//assign new weights to newLayers array in the form of a newly instantiated Layer
                 }
                 else
                 {
