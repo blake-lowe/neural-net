@@ -314,7 +314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VNet: {fileID: 1764534155}
   netPrefab: {fileID: 1255778331486242, guid: e870c62443a1faf43963edfbbc893e41, type: 2}
-  curvePrefab: {fileID: 1255778331486242, guid: e870c62443a1faf43963edfbbc893e41,
+  curvePrefab: {fileID: 1624237995686652, guid: d4c7aab4a802bc94c8abfe8a879da792,
     type: 2}
   coordinateScale: 1
   min: 0
@@ -322,17 +322,17 @@ MonoBehaviour:
   numPoints: 20
   testMin: 0
   testMax: 10
-  numTestPoints: 10
+  numTestPoints: 3
   numHiddenLayers: 1
-  hiddenLayerSize: 3
-  populationSize: 100
+  hiddenLayerSize: 1
+  populationSize: 200
   numParents: 2
-  numCrossoverPoints: 1
+  numCrossoverPoints: 2
   mutationChance: 0.1
-  environmentalPressure: 0.5
-  eliteFraction: 0.1
-  tournamentSize: 2
-  numGenerations: 10
+  environmentalPressure: 0.4
+  eliteFraction: 0.03
+  tournamentSize: 50
+  numGenerations: 20
 --- !u!4 &1764534154
 Transform:
   m_ObjectHideFlags: 0
@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   origin: {x: 11, y: 0, z: 0}
-  layerSeparation: 2
+  layerSeparation: 8
   nodeSeparation: 2
   nodeParent: {fileID: 990507122}
   weightParent: {fileID: 1956200547}
