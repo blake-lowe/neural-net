@@ -316,7 +316,7 @@ public class NeuralNet:IGeneticIndividual
                             {
                                 if (crossoverPoints[iter, 0] == i && crossoverPoints[iter, 1] == j && crossoverPoints[iter, 2] == k)
                                 {
-                                    int temp = (int)(RandHolder.NextDouble() * (numParents - 1));//the minus one is because we are avoiding the current activeParentIndex in this reassignment
+                 y                   int temp = (int)(RandHolder.NextDouble() * (numParents - 1));//the minus one is because we are avoiding the current activeParentIndex in this reassignment
                                     if (temp < activeParentIndex)
                                     {
                                         activeParentIndex = temp;

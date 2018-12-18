@@ -110,7 +110,6 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
             }
 
             FitnessSort();//order the individuals by fitness
-            Debug.Log(individuals[0].Fitness().ToString());
         }
         return individuals[0];//the highest fitness
     }

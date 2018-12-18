@@ -35,7 +35,7 @@ public class CurveFitGA : MonoBehaviour
     public float environmentalPressure; //from 0 to 1. 1 is no survivors
     public float eliteFraction;         //number of solutions to save from one generation to the next 0 is none 1 is all saved. (should never be > 1-environmentalPressure then errors) (if > like .2 then GA won't work well)
     public int tournamentSize;          //size of the randomly chosen subset from which the most fit individual will be chosen for reproduction.  must be 1 <= x <= populationSize.
-    public int numGenerations;          //how much training to do
+    public int numGenerationsPerSecond;          //how much training to do
     
 
     private GameObject[] CurvePoints;
@@ -45,6 +45,8 @@ public class CurveFitGA : MonoBehaviour
     private GeneticAlgorithm ga;
     private double[,] testInputSets;
     private double[,] testOutputSets;
+
+    private float nextGenerationTime;
 
     // Use this for initialization
     void Start()
@@ -78,15 +80,22 @@ public class CurveFitGA : MonoBehaviour
         VNet.net = net;
         VNet.Initialize();
 
-        //training
-        ga = new GeneticAlgorithm(net, populationSize, numParents, environmentalPressure, eliteFraction, numCrossoverPoints, mutationChance, tournamentSize);
-        net = (NeuralNet)ga.TrainGeneration(numGenerations);
-        updateNetPoints();
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        float secondsPerGeneration = 1 / numGenerationsPerSecond;
+        if (Time.time > nextGenerationTime)
+        {
+            //training
+            ga = new GeneticAlgorithm(net, populationSize, numParents, environmentalPressure, eliteFraction, numCrossoverPoints, mutationChance, tournamentSize);
+            net = (NeuralNet)ga.TrainGeneration(1);
+            updateNetPoints();
+            nextGenerationTime += secondsPerGeneration;
+        }
+
 
     }
 
@@ -111,6 +120,8 @@ public class CurveFitGA : MonoBehaviour
             double[] outputs = net.FeedForward(inputs);
             double y = outputs[0];
             NetPoints[i].GetComponent<Transform>().position = new Vector3((float)(coordinateScale * x), (float)(coordinateScale * (float)y), 0);
+            Debug.Log(ga.individuals[0].Fitness());
+            Debug.Log(ga.individuals[populationSize - 1].Fitness());
         }
     }
 }
