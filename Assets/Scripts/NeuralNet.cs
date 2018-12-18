@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class NeuralNet:IGeneticIndividual
+public class NeuralNet:IGeneticIndividual//a class which implements the Neural Net. Designed to be trained through either backpropagation or with a Genetic Algorithm (hence implementation of interface
 {
     int numInputs;          //number of nodes in the input layer of the net
     int numOutputs;         //number of nodes in the output layer of the net
