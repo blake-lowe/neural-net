@@ -65,9 +65,34 @@ public class TestGeneticIndividual : IGeneticIndividual
         for (int childIter = 0; childIter < numChildren; childIter++)//iterate once for each child to be generated
         {
             int[] crossoverPoints = new int[numCrossoverPoints];
-            //todo fill x points
+            //fill crossoverPoints array with random ints which are indexes of genes array
+            for (int i = 0; i < crossoverPoints.Length; i++)
+            {
+                crossoverPoints[i] = (int)(RandHolder.NextDouble() * parents[0].genes.Length);
+            }
             int activeParentIndex = 0;
-            //todo generate children use NeuralNet.cs as reference
+            //generate child
+            children[childIter] = new TestGeneticIndividual(parents[0].genes.Length);
+            for (int i = 0; i < parents[0].genes.Length; i++)
+            {
+                children[childIter].genes[i] = parents[activeParentIndex].genes[i];
+                for (int iter = 0; iter < numCrossoverPoints; iter++)
+                {
+                    if(i == crossoverPoints[iter])
+                    {
+                        int temp = (int)(RandHolder.NextDouble() * (parents.Length - 1));//minus one for value exclusion, so between first and second to last index
+                        if(temp != activeParentIndex)
+                        {
+                            activeParentIndex = temp;
+                        }
+                        else
+                        {
+                            activeParentIndex = parents.Length - 1;//minus one because it is max index of array
+                        }
+                    }
+                }
+            }
+
         }
         //convert array of type TestGeneticIndividual to type IGeneticIndividual
         IGeneticIndividual[] IChildren = new IGeneticIndividual[numChildren];
