@@ -80,7 +80,7 @@ public class CurveFitGA : MonoBehaviour
         VNet.net = net;
         VNet.Initialize();
 
-
+        ga = new GeneticAlgorithm(net, populationSize, numParents, environmentalPressure, eliteFraction, numCrossoverPoints, mutationChance, tournamentSize);
     }
 
     // Update is called once per frame
@@ -90,7 +90,7 @@ public class CurveFitGA : MonoBehaviour
         if (Time.time > nextGenerationTime)
         {
             //training
-            ga = new GeneticAlgorithm(net, populationSize, numParents, environmentalPressure, eliteFraction, numCrossoverPoints, mutationChance, tournamentSize);
+            
             net = (NeuralNet)ga.TrainGeneration(1);
             updateNetPoints();
             nextGenerationTime += secondsPerGeneration;
