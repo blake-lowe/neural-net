@@ -48,6 +48,9 @@ public class CurveFitGA : MonoBehaviour
 
     private float nextGenerationTime;
 
+    public AnimationCurve plotBest = new AnimationCurve();
+    public AnimationCurve plotWorst = new AnimationCurve();
+
     // Use this for initialization
     void Start()
     {
@@ -90,10 +93,16 @@ public class CurveFitGA : MonoBehaviour
         if (Time.time > nextGenerationTime)
         {
             //training
-            
-            net = (NeuralNet)ga.TrainGeneration(1);
-            updateNetPoints();
-            nextGenerationTime += secondsPerGeneration;
+            if (ga != null)
+            {
+                net = (NeuralNet)ga.TrainGeneration(1);
+                updateNetPoints();
+                nextGenerationTime += secondsPerGeneration;
+                float bestFitnessNow = (float)ga.individuals[0].Fitness();
+                float worstFitnessNow = (float)ga.individuals[populationSize - 1].Fitness();
+                plotBest.AddKey(Time.realtimeSinceStartup, bestFitnessNow);
+                plotWorst.AddKey(Time.realtimeSinceStartup, worstFitnessNow);
+            }
         }
 
 
@@ -120,8 +129,6 @@ public class CurveFitGA : MonoBehaviour
             double[] outputs = net.FeedForward(inputs);
             double y = outputs[0];
             NetPoints[i].GetComponent<Transform>().position = new Vector3((float)(coordinateScale * x), (float)(coordinateScale * (float)y), 0);
-            Debug.Log(ga.individuals[0].Fitness());
-            Debug.Log(ga.individuals[populationSize - 1].Fitness());
         }
     }
 }
