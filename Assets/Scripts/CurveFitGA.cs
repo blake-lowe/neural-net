@@ -97,11 +97,12 @@ public class CurveFitGA : MonoBehaviour
             {
                 net = (NeuralNet)ga.TrainGeneration(1);
                 updateNetPoints();
-                nextGenerationTime += secondsPerGeneration;
+                
                 float bestFitnessNow = (float)ga.individuals[0].Fitness();
                 float worstFitnessNow = (float)ga.individuals[populationSize - 1].Fitness();
                 plotBest.AddKey(Time.realtimeSinceStartup, bestFitnessNow);
                 plotWorst.AddKey(Time.realtimeSinceStartup, worstFitnessNow);
+                nextGenerationTime += secondsPerGeneration;
             }
         }
 

@@ -332,7 +332,19 @@ MonoBehaviour:
   environmentalPressure: 0.4
   eliteFraction: 0.03
   tournamentSize: 50
-  numGenerationsPerSecond: 2
+  numGenerationsPerSecond: 5
+  plotBest:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  plotWorst:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &1764534154
 Transform:
   m_ObjectHideFlags: 0
