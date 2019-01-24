@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TestGAControl : MonoBehaviour {
 
+    public int testIndividualGeneSize;
+
     public int populationSize;          //total number of individuals
     public int numParents;              //number of parents per reproduction set
     public int numCrossoverPoints;      //number of crossover points in genetic combination. Will be used in GeneticIndividual.Reproduce(). should be x >= numParents.
@@ -16,13 +18,31 @@ public class TestGAControl : MonoBehaviour {
     private GeneticAlgorithm ga;
     private float nextGenerationTime;
 
+    public AnimationCurve plotBest = new AnimationCurve();
+    public AnimationCurve plotWorst = new AnimationCurve();
+
     // Use this for initialization
     void Start () {
-		//todo use curveFitGA as ref
+        TestGeneticIndividual progenitor = new TestGeneticIndividual(testIndividualGeneSize);
+        ga = new GeneticAlgorithm(progenitor, populationSize, numParents, environmentalPressure, eliteFraction, numCrossoverPoints, mutationChance, tournamentSize);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        //todo use curveFitGA as ref
+        float secondsPerGeneration = 1 / numGenerationsPerSecond;
+        if (Time.time > nextGenerationTime)
+        {
+            if (ga != null)
+            {
+                ga.TrainGeneration(1);
+                TestGeneticIndividual bestIndividual = (TestGeneticIndividual)ga.individuals[0];
+                TestGeneticIndividual worstIndividual = (TestGeneticIndividual)ga.individuals[populationSize-1];
+                //debug
+                plotBest.AddKey(Time.realtimeSinceStartup, (float)bestIndividual.Fitness());
+                plotWorst.AddKey(Time.realtimeSinceStartup, (float)worstIndividual.Fitness());
+
+                nextGenerationTime += secondsPerGeneration;
+            }
+        }
     }
 }
