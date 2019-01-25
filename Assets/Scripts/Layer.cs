@@ -177,6 +177,6 @@ public static class Functions
     }
     public static double SigmoidDeritive(double x)
     {
-        return x * (1 - x);
+        return Sigmoid(x) * (1 - Sigmoid(x));
     }
 }
