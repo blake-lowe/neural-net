@@ -78,7 +78,7 @@ public class CurveFitGA : MonoBehaviour
         {
             NetPoints[i] = Instantiate(netPrefab);
         }
-        updateNetPoints();
+        updateNetPoints(net);
 
         VNet.net = net;
         VNet.Initialize();
@@ -96,8 +96,8 @@ public class CurveFitGA : MonoBehaviour
             if (ga != null)
             {
                 net = (NeuralNet)ga.TrainGeneration(1);
-                updateNetPoints();
-                
+                updateNetPoints(net);
+                VNet.net = net;
                 float bestFitnessNow = (float)ga.individuals[0].Fitness();
                 float worstFitnessNow = (float)ga.individuals[populationSize - 1].Fitness();
                 plotBest.AddKey(Time.realtimeSinceStartup, bestFitnessNow);
@@ -120,14 +120,14 @@ public class CurveFitGA : MonoBehaviour
         }
     }
 
-    void updateNetPoints()
+    void updateNetPoints(NeuralNet netarg)
     {
         for (int i = 0; i < NetPoints.Length; i++)
         {
             double x = min + i * ((max - min) / numPoints);
             double[] inputs = new double[1];
             inputs[0] = x;
-            double[] outputs = net.FeedForward(inputs);
+            double[] outputs = netarg.FeedForward(inputs);
             double y = outputs[0];
             NetPoints[i].GetComponent<Transform>().position = new Vector3((float)(coordinateScale * x), (float)(coordinateScale * (float)y), 0);
         }

@@ -318,11 +318,11 @@ MonoBehaviour:
     type: 2}
   coordinateScale: 1
   min: 0
-  max: 10
-  numPoints: 20
+  max: 1
+  numPoints: 10
   testMin: 0
-  testMax: 10
-  numTestPoints: 3
+  testMax: 1
+  numTestPoints: 10
   numHiddenLayers: 1
   hiddenLayerSize: 1
   populationSize: 200
@@ -332,7 +332,7 @@ MonoBehaviour:
   environmentalPressure: 0.4
   eliteFraction: 0.03
   tournamentSize: 50
-  numGenerationsPerSecond: 5
+  numGenerationsPerSecond: 2
   plotBest:
     serializedVersion: 2
     m_Curve: []
