@@ -322,7 +322,7 @@ MonoBehaviour:
   numPoints: 10
   testMin: 0
   testMax: 1
-  numTestPoints: 10
+  numTestPoints: 3
   numHiddenLayers: 1
   hiddenLayerSize: 1
   populationSize: 200
