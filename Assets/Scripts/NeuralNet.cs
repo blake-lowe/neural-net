@@ -116,6 +116,15 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
 
     }
 
+    public NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int hiddenLayerSize, Layer[] layers)//use this constructor to hardcode values
+    {
+        this.numInputs = numInputs;
+        this.numOutputs = numOutputs;
+        this.numHiddenLayers = numHiddenLayers;
+        this.hiddenLayerSize = hiddenLayerSize;
+        this.layers = layers;
+    }
+
     public double[] FeedForward(double[] inputValues) //inputValues.Length must equal numInputs //will return double[] with length = numOutputs
     {
         double[] lastValues = new double[hiddenLayerSize]; //holds values of the last layer to be passed into the current layer
