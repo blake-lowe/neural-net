@@ -105,7 +105,7 @@ public class Layer//a constituent class of NeuralNet. A container specific to th
             {
                 sum += weights[m, j] * previousValues[j-1];
             }
-            sum = Functions.Sigmoid(sum);    //normalize values between 0 and 1
+            //sum = Functions.Sigmoid(sum);    //normalize values between 0 and 1//removed normalization
             values[m] = sum;
         }
         return values;

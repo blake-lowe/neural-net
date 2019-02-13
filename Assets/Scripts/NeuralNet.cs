@@ -133,7 +133,12 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
         {
             lastValues = layers[i].FeedForward(lastValues);//if you get an error on this line check the outputs and target array sizes. Maybe net constructed wrong?
         }
-        return layers[layers.Length - 1].FeedForward(lastValues);
+        double[] outputs = layers[layers.Length - 1].FeedForward(lastValues);
+        for (int i = 0; i < outputs.Length; i++)//added normalization of outputs
+        {
+            outputs[i] = Functions.Sigmoid(outputs[i]);
+        }
+        return outputs;
     }
 
     public NeuralNet Backpropagate(double[] inputValues, double[] targets)//targets must have length equal to numOutputs. usage is net = net.Backpropagate();
