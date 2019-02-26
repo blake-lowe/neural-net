@@ -89,7 +89,7 @@ public class Layer//a constituent class of NeuralNet. A container specific to th
             for (int j = 0; j < weights.GetLength(1); j++)
             {
                 
-                weights[i, j] = RandHolder.NextDouble();
+                weights[i, j] = RandHolder.NextDouble()*2 - 1;//from [-1, 1)
             }           
         }
     }

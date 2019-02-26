@@ -424,7 +424,8 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
             k = (int)(RandHolder.NextDouble() * (hiddenLayerSize) + 1);//+1 for bias
         }
         //set new value;
-        double newValue = RandHolder.NextDouble();
+        double currentValue = Layers[i].Weights[j, k];
+        double newValue = (RandHolder.NextDouble()*3 - 1.5)*currentValue; //[-1.5, 1.5)
         Layers[i].Weights[j, k] = newValue;
     }
 
