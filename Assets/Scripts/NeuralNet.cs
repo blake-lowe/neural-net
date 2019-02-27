@@ -425,7 +425,11 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
         }
         //set new value;
         double currentValue = Layers[i].Weights[j, k];
-        double newValue = (RandHolder.NextDouble()*3 - 1.5)*currentValue; //[-1.5, 1.5)
+        double newValue = (RandHolder.NextDouble() + 0.5)*currentValue; //[0.5, 1.5)
+        if(RandHolder.NextDouble() > 0.5)
+        {
+            newValue = -newValue;//(-1.5, -0.5] union [0.5, 1.5)
+        }
         Layers[i].Weights[j, k] = newValue;
     }
 

@@ -6,7 +6,7 @@ static class CurveToFitGA//this is the function to approximate
 {
     public static double Function(double x)
     {
-        return x;  //change function he
+        return x*x;  //change function he
     }
 }
 

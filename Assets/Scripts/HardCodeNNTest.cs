@@ -12,12 +12,12 @@ public class HardCodeNNTest : MonoBehaviour {
 	void Start () {
         Layer[] layers = new Layer[2];
         double[,] weights = new double[1, 2];
-        weights[0, 0] = 0;
-        weights[0, 1] = 1;
+        weights[0, 0] = -0.75;
+        weights[0, 1] = 1.7;
         layers[0] = new Layer(1, 1, weights);
         weights = new double[1, 2];
-        weights[0, 0] = 0;
-        weights[0, 1] = 1;
+        weights[0, 0] = -0.25;
+        weights[0, 1] = 3;
         layers[1] = new Layer(1, 1, weights);
 		NeuralNet net = new NeuralNet(1, 1, 1, 1, layers);
 
