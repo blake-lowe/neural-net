@@ -322,17 +322,17 @@ MonoBehaviour:
   numPoints: 10
   testMin: 0
   testMax: 1
-  numTestPoints: 3
-  numHiddenLayers: 2
-  hiddenLayerSize: 2
-  populationSize: 200
+  numTestPoints: 8
+  numHiddenLayers: 3
+  hiddenLayerSize: 3
+  populationSize: 100
   numParents: 2
   numCrossoverPoints: 2
-  mutationChance: 0.5
-  environmentalPressure: 0.6
+  mutationChance: 0.85
+  environmentalPressure: 0.7
   eliteFraction: 0.03
   tournamentSize: 50
-  numGenerationsPerSecond: 2
+  numGenerationsPerSecond: 5
   plotBest:
     serializedVersion: 2
     m_Curve: []
@@ -377,8 +377,9 @@ MonoBehaviour:
   nodePrefab: {fileID: 1624237995686652, guid: d4c7aab4a802bc94c8abfe8a879da792, type: 2}
   weightPrefab: {fileID: 1834378584830746, guid: 7c030cf7a6772274394f4fa52638250e,
     type: 2}
-  Color0: {r: 0, g: 0, b: 0, a: 0}
-  Color1: {r: 1, g: 1, b: 1, a: 0}
+  ColorNegative: {r: 1, g: 0, b: 0, a: 0}
+  ColorMidpoint: {r: 1, g: 1, b: 1, a: 0}
+  ColorPositive: {r: 0.01530087, g: 1, b: 0, a: 0}
 --- !u!1 &1792554155
 GameObject:
   m_ObjectHideFlags: 0
