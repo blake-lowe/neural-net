@@ -179,4 +179,20 @@ public static class Functions
     {
         return Sigmoid(x) * (1 - Sigmoid(x));
     }
+
+    public static double tanh(double x)
+    {
+        if(double.IsNegativeInfinity(x))
+        {
+            return -1;
+        }
+        else if(double.IsPositiveInfinity(x))
+        {
+            return 1;
+        }
+        else
+        {
+            return (Mathf.Exp((float)x) - Mathf.Exp(-(float)x)) / (Mathf.Exp((float)x) + Mathf.Exp(-(float)x));
+        }
+    }
 }

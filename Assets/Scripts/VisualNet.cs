@@ -13,8 +13,9 @@ public class VisualNet : MonoBehaviour {//A unity MonoBehaviour/script designed 
     public GameObject nodePrefab;
     public GameObject weightPrefab;
 
-    public Color Color0;  //limit of nodes and weights color when they approach a value of 0
-    public Color Color1;  //limit of nodes and weights color when they approach a value of 1
+    public Color ColorNegative;  //limit of nodes and weights color when they approach a value of -1
+    public Color ColorMidpoint;
+    public Color ColorPositive;  //limit of nodes and weights color when they approach a value of 1
 
     [System.NonSerialized]
     public NeuralNet net;
@@ -98,7 +99,7 @@ public class VisualNet : MonoBehaviour {//A unity MonoBehaviour/script designed 
                 for (int j = 0; j < nodes.GetLength(1); j++)
                 {
                     double value = net.Layers[i].Values[j];//grab value
-                    Color colorValue = Helper.InterpolateColor(Color0, Color1, value);//calculate color
+                    Color colorValue = Helper.InterpolateColor2(ColorNegative, ColorMidpoint, ColorPositive, value);//calculate color
                     nodes[i, j].GetComponent<Renderer>().material.SetColor("_Color", colorValue);//set color of material
                     nodes[i, j].GetComponent<FloatDisplay>().n = (float)value;
                 }
@@ -107,7 +108,7 @@ public class VisualNet : MonoBehaviour {//A unity MonoBehaviour/script designed 
             {
                 int i = nodes.GetLength(0) - 1;
                 double value = net.Layers[i].Values[j];//grab value
-                Color colorValue = Helper.InterpolateColor(Color0, Color1, value);//calculate color
+                Color colorValue = Helper.InterpolateColor2(ColorNegative, ColorMidpoint, ColorPositive, value);//calculate color
                 nodes[i, j].GetComponent<Renderer>().material.SetColor("_Color", colorValue);//set color of material
                 nodes[i,j].GetComponent<FloatDisplay>().n = (float)value;
             }
@@ -118,7 +119,7 @@ public class VisualNet : MonoBehaviour {//A unity MonoBehaviour/script designed 
                 {
                     int i = 0;
                     double weight = net.Layers[i].Weights[j, k];//grab weight
-                    Color colorWeight = Helper.InterpolateColor(Color0, Color1, weight);//calculate color
+                    Color colorWeight = Helper.InterpolateColor2(ColorNegative, ColorMidpoint, ColorPositive, weight);//calculate color
                     weights[i, j, k].GetComponent<LineRenderer>().material.SetColor("_Color", colorWeight);
                     weights[i,j,k].GetComponent<FloatDisplay>().n = (float)weight;
                 }
@@ -130,7 +131,7 @@ public class VisualNet : MonoBehaviour {//A unity MonoBehaviour/script designed 
                     for (int k = 0; k < weights.GetLength(2); k++)
                     {
                         double weight = net.Layers[i].Weights[j, k];//grab weight
-                        Color colorWeight = Helper.InterpolateColor(Color0, Color1, weight);//calculate color
+                        Color colorWeight = Helper.InterpolateColor2(ColorNegative, ColorMidpoint, ColorPositive, weight);//calculate color
                         weights[i, j, k].GetComponent<LineRenderer>().material.SetColor("_Color", colorWeight);
                         weights[i, j, k].GetComponent<FloatDisplay>().n = (float)weight;
                     }
@@ -142,7 +143,7 @@ public class VisualNet : MonoBehaviour {//A unity MonoBehaviour/script designed 
                 {
                     int i = weights.GetLength(0) - 1;
                     double weight = net.Layers[i].Weights[j, k];//grab weight
-                    Color colorWeight = Helper.InterpolateColor(Color0, Color1, weight);//calculate color
+                    Color colorWeight = Helper.InterpolateColor2(ColorNegative, ColorMidpoint, ColorPositive, weight);//calculate color
                     weights[i, j, k].GetComponent<LineRenderer>().material.SetColor("_Color", colorWeight);
                     weights[i, j, k].GetComponent<FloatDisplay>().n = (float)weight;
                 }
@@ -160,5 +161,23 @@ static class Helper
         double b = ((x * (Color1.b - Color0.b)) + Color0.b);
         return new Color((float)r, (float)g, (float)b);
 
+    }
+    public static Color InterpolateColor2(Color ColorMin, Color Color0, Color ColorMax, double x)
+    {
+        double normalizedX = Functions.tanh(x);//[-1, 1]
+        Color resultColor = Color.magenta;
+        if (normalizedX == 0)
+        {
+            resultColor = Color0;
+        }
+        else if(normalizedX > 0)
+        {
+            resultColor = InterpolateColor(Color0, ColorMax, normalizedX);
+        }
+        else if(normalizedX < 0)
+        {
+            resultColor = InterpolateColor(Color0, ColorMin, -normalizedX);
+        }
+        return resultColor;
     }
 }
