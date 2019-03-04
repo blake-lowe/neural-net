@@ -10,6 +10,9 @@ public class HardCodeNNTest : MonoBehaviour {
     // Use this for initialization
     public VisualNet VNet;
 	void Start () {
+
+        PlayerPrefs.SetString("IOFilepath", "C:/Users/bolowe19/Downloads/new.json");
+        /*
         Layer[] layers = new Layer[2];
         double[,] weights = new double[1, 2];
         weights[0, 0] = -0.75;
@@ -20,13 +23,20 @@ public class HardCodeNNTest : MonoBehaviour {
         weights[0, 1] = 3;
         layers[1] = new Layer(1, 1, weights);
 		NeuralNet net = new NeuralNet(1, 1, 1, 1, layers);
+        */
 
-        VNet.net = net;
-        VNet.Initialize();
+        NeuralNet net = NeuralNet.ReadFromFile(PlayerPrefs.GetString("IOFilepath"));
+
+        //VNet.net = net;
+        //VNet.Initialize();
 
         Debug.Log(net.FeedForward(new double[] { 0 })[0]);
         Debug.Log(net.FeedForward(new double[] { 0.5 })[0]);
         Debug.Log(net.FeedForward(new double[] { 1 })[0]);
+
+        
+
+        //net.WriteToFile(PlayerPrefs.GetString("IOFilepath"));
     }
 
 }

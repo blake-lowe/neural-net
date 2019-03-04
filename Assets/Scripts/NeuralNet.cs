@@ -1,15 +1,18 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
+[System.Serializable]
 public class NeuralNet:IGeneticIndividual//a class which implements the Neural Net. Designed to be trained through either backpropagation or with a Genetic Algorithm (hence implementation of interface
 {
-    int numInputs;          //number of nodes in the input layer of the net
-    int numOutputs;         //number of nodes in the output layer of the net
-    int numHiddenLayers;    //the number of hidden layers
-    int hiddenLayerSize;    //the number of nodes in each hidden layer //DOES NOT SUPPORT VARYING HIDDEN LAYER SIZES// although I don't see why not(8/29)
-    double learningRate;       //factor to multiply deltaweights by during backpropagation
-    Layer[] layers; //including hidden layers and output layers but not input layer. Logic works by attaching a set of weights to before a layer.
+    public int numInputs;          //number of nodes in the input layer of the net
+    public int numOutputs;         //number of nodes in the output layer of the net
+    public int numHiddenLayers;    //the number of hidden layers
+    public int hiddenLayerSize;    //the number of nodes in each hidden layer //DOES NOT SUPPORT VARYING HIDDEN LAYER SIZES// although I don't see why not(8/29)
+    public double learningRate;       //factor to multiply deltaweights by during backpropagation
+    public Layer[] layers; //including hidden layers and output layers but not input layer. Logic works by attaching a set of weights to before a layer.
     public double numTestSets;
     public double[,] TestInputSets;//first column is index and the second column is the test set
     public double[,] TestOutputSets;
@@ -70,6 +73,11 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
         {
             learningRate = value;
         }
+    }
+
+    public NeuralNet()
+    {
+
     }
 
     public NeuralNet(int numInputs, int numOutputs, int numHiddenLayers, int hiddenLayerSize, double learningRate)//use this constructor for backpropagation training
@@ -470,6 +478,44 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
         else
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public void WriteToFile(string filePath)
+    {
+        // Convert the instance ('this') of this class to a JSON string with "pretty print" (nice indenting).
+        string json = JsonUtility.ToJson(this, true);
+
+        // Write that JSON string to the specified file.
+        File.WriteAllText(filePath, json);
+    }
+
+    /// <param name="filePath">The file to attempt to read from.</param>
+    public static NeuralNet ReadFromFile(string filePath)
+    {
+        // If the file doesn't exist then just return the default object.
+        if (!File.Exists(filePath))
+        {
+            Debug.Log("ReadFromFile -- file not found, returning new object. Returning default SaveData");
+            return new NeuralNet();
+        }
+        else
+        {
+            // If the file does exist then read the entire file to a string.
+            string contents = File.ReadAllText(filePath);
+            Debug.Log("ReadFromFile -- Operation Successful");
+            Debug.Log(filePath);
+            Debug.Log(contents);
+
+            // If it happens that the file is somehow empty then tell us and return a new SaveData object.
+            if (string.IsNullOrEmpty(contents))
+            {
+                Debug.Log("ReadFromFile -- File is empty. Returning default SaveData");
+                return new NeuralNet();
+            }
+
+            // Otherwise we can just use JsonUtility to convert the string to a new SaveData object.
+            return JsonUtility.FromJson<NeuralNet>(contents);
         }
     }
 }

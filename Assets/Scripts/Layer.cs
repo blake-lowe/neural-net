@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Layer//a constituent class of NeuralNet. A container specific to the structure of NeuralNets
 {
-    private int numNodesPrevious;       //number of nodes in the previous layer
-    private int numNodes;               //number of nodes in this layer
-    double[,] weights;                  //the weights connecting the previous layer to this layer [node, nodePrevious]//[i,0] is a bias for the node i
-    double[] values;                    //values used for feed-forward calculation
+    public int numNodesPrevious;       //number of nodes in the previous layer
+    public int numNodes;               //number of nodes in this layer
+    public double[,] weights;                  //the weights connecting the previous layer to this layer [node, nodePrevious]//[i,0] is a bias for the node i
+    public double[] values;                    //values used for feed-forward calculation
 
     public Layer(int numNodesPrevious, int numNodes)
     {
