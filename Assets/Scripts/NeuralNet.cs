@@ -481,41 +481,57 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
         }
     }
 
-    public void WriteToFile(string filePath)
+    public void WriteToFile(string directory, string filename)
     {
-        // Convert the instance ('this') of this class to a JSON string with "pretty print" (nice indenting).
-        string json = JsonUtility.ToJson(this, true);
+        //create empty file
+        string filetype = ".csv";
+        string filepath = directory + "/" + filename + filetype;
+        System.IO.File.WriteAllText(filepath, "");
 
-        // Write that JSON string to the specified file.
-        File.WriteAllText(filePath, json);
+        //fill with net dimensions
+        string header = "numInputs, numOutputs, numHiddenLayers, hiddenLayerSize";
+        string record = numInputs.ToString() + ", " + numOutputs.ToString() + ", " + numHiddenLayers.ToString() + ", " + hiddenLayerSize.ToString();
+        System.IO.File.WriteAllLines(filepath, new string[] { header, record });
+
+        //fill with net weights
+
+        //first hidden layer TODO
+        string[] contents = new string[hiddenLayerSize + 1];//+1 for header
+        contents[0] = "bias, weights";//header
+        
+        for (int i = 1; i < hiddenLayerSize + 1; i++)//fix these bounds and go over
+        {
+            string[] row = new string[numInputs + 1];//+1 for bias
+            for (int j = 0; j < numInputs + 1; j++)
+            {
+                row[j] = layers[0].weights[i - 1, j].ToString();
+            }
+            record = string.Join(", ", row);
+            contents[i] = record;
+        }
+
+        //hidden layers
+        //TODO
+        //output layer
+        contents = new string[numOutputs + 1];//+1 for header
+        contents[0] = "bias, weights";//header
+
+        for (int i = 1; i < numOutputs + 1; i++)
+        {
+            string[] row = new string[hiddenLayerSize + 1];
+            for (int j = 0; j < hiddenLayerSize + 1; j++)
+            {
+                row[j] = layers[layers.Length-1].weights[i - 1, j].ToString();
+            }
+        }
+
+
+
+
     }
 
-    /// <param name="filePath">The file to attempt to read from.</param>
-    public static NeuralNet ReadFromFile(string filePath)
+    public static NeuralNet ReadFromFile(string filepath)
     {
-        // If the file doesn't exist then just return the default object.
-        if (!File.Exists(filePath))
-        {
-            Debug.Log("ReadFromFile -- file not found, returning new object. Returning default SaveData");
-            return new NeuralNet();
-        }
-        else
-        {
-            // If the file does exist then read the entire file to a string.
-            string contents = File.ReadAllText(filePath);
-            Debug.Log("ReadFromFile -- Operation Successful");
-            Debug.Log(filePath);
-            Debug.Log(contents);
-
-            // If it happens that the file is somehow empty then tell us and return a new SaveData object.
-            if (string.IsNullOrEmpty(contents))
-            {
-                Debug.Log("ReadFromFile -- File is empty. Returning default SaveData");
-                return new NeuralNet();
-            }
-
-            // Otherwise we can just use JsonUtility to convert the string to a new SaveData object.
-            return JsonUtility.FromJson<NeuralNet>(contents);
-        }
+        return null;
     }
 }
