@@ -493,38 +493,54 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
         string record = numInputs.ToString() + ", " + numOutputs.ToString() + ", " + numHiddenLayers.ToString() + ", " + hiddenLayerSize.ToString();
         System.IO.File.WriteAllLines(filepath, new string[] { header, record });
 
-        //fill with net weights
-
-        //first hidden layer TODO
-        string[] contents = new string[hiddenLayerSize + 1];//+1 for header
-        contents[0] = "bias, weights";//header
-        
-        for (int i = 1; i < hiddenLayerSize + 1; i++)//fix these bounds and go over
+        //fill with net weights///////////////////////
+        //first hidden layer
+        string[] contents = new string[hiddenLayerSize + 1];//number of nodes in layer +1 for header
+        contents[0] = "hidden layer 0";//header
+        for (int i = 0; i < hiddenLayerSize; i++)//for each node in layer
         {
-            string[] row = new string[numInputs + 1];//+1 for bias
-            for (int j = 0; j < numInputs + 1; j++)
+            string[] row = new string[numInputs + 1];//number of previous nodes +1 for bias
+            for (int j = 0; j < numInputs + 1; j++)//for each node in previous layer
             {
-                row[j] = layers[0].weights[i - 1, j].ToString();
+                row[j] = layers[0].weights[i, j].ToString();
             }
             record = string.Join(", ", row);
-            contents[i] = record;
+            contents[i+1] = record;//+1 for header
         }
+        AppendAllLines(filepath, contents);
 
         //hidden layers
-        //TODO
+        for (int layerIndex = 1; layerIndex < numHiddenLayers; layerIndex++)//for each hidden layer excluding the first which is handled above
+        {
+            contents = new string[hiddenLayerSize + 1];//number of nodes in layer +1 for header
+            contents[0] = "hidden layer "+ layerIndex.ToString();//header
+            for (int i = 0; i < hiddenLayerSize; i++)//for each node in layer
+            {
+                string[] row = new string[hiddenLayerSize + 1];//number of previous nodes +1 for bias
+                for (int j = 0; j < hiddenLayerSize + 1; j++)//for each node in previous layer
+                {
+                    row[j] = layers[layerIndex].weights[i, j].ToString();
+                }
+                record = string.Join(", ", row);
+                contents[i + 1] = record;//+1 for header
+            }
+            AppendAllLines(filepath, contents);
+        }
         //output layer
-        contents = new string[numOutputs + 1];//+1 for header
-        contents[0] = "bias, weights";//header
-
-        for (int i = 1; i < numOutputs + 1; i++)
+        contents = new string[numOutputs + 1];//number of nodes in layer +1 for header
+        contents[0] = "output layer";//header
+        for (int i = 0; i < numOutputs; i++)//for each node in layer
         {
             string[] row = new string[hiddenLayerSize + 1];
-            for (int j = 0; j < hiddenLayerSize + 1; j++)
+            for (int j = 0; j < hiddenLayerSize + 1; j++)//for each node in previous layer
             {
-                row[j] = layers[layers.Length-1].weights[i - 1, j].ToString();
+                row[j] = layers[layers.Length-1].weights[i, j].ToString();
             }
+            record = string.Join(", ", row);
+            contents[i + 1] = record;//+1 for header
         }
-
+        AppendAllLines(filepath, contents);
+        ///////////////////////////////////
 
 
 
@@ -533,5 +549,13 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
     public static NeuralNet ReadFromFile(string filepath)
     {
         return null;
+    }
+
+    private static void AppendAllLines(string filepath, string[] contents)
+    {
+        for (int i = 0; i < contents.Length; i++)
+        {
+            System.IO.File.AppendAllText(filepath, contents[i] + "\n");
+        }
     }
 }

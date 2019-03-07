@@ -36,7 +36,7 @@ public class HardCodeNNTest : MonoBehaviour {
 
         
 
-        net.WriteToFile(PlayerPrefs.GetString("IOFilepath"), "test");
+        net.WriteToFile(PlayerPrefs.GetString("IOFilepath"), "test1");
     }
 
 }
