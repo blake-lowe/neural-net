@@ -44,6 +44,10 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
         {
             return numOutputs;
         }
+        set
+        {
+            numOutputs = value;
+        }
     }
 
     public int NumHiddenLayers
@@ -52,6 +56,10 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
         {
             return numHiddenLayers;
         }
+        set
+        {
+            numHiddenLayers = value;
+        }
     }
 
     public int HiddenLayerSize
@@ -59,6 +67,10 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
         get
         {
             return hiddenLayerSize;
+        }
+        set
+        {
+            hiddenLayerSize = value;
         }
     }
 
@@ -489,7 +501,7 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
         System.IO.File.WriteAllText(filepath, "");
 
         //fill with net dimensions
-        string header = "numInputs, numOutputs, numHiddenLayers, hiddenLayerSize";
+        string header = "numInputs,numOutputs,numHiddenLayers,hiddenLayerSize";
         string record = numInputs.ToString() + ", " + numOutputs.ToString() + ", " + numHiddenLayers.ToString() + ", " + hiddenLayerSize.ToString();
         System.IO.File.WriteAllLines(filepath, new string[] { header, record });
 
@@ -504,7 +516,7 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
             {
                 row[j] = layers[0].weights[i, j].ToString();
             }
-            record = string.Join(", ", row);
+            record = string.Join(",", row);
             contents[i+1] = record;//+1 for header
         }
         AppendAllLines(filepath, contents);
@@ -521,7 +533,7 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
                 {
                     row[j] = layers[layerIndex].weights[i, j].ToString();
                 }
-                record = string.Join(", ", row);
+                record = string.Join(",", row);
                 contents[i + 1] = record;//+1 for header
             }
             AppendAllLines(filepath, contents);
@@ -536,7 +548,7 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
             {
                 row[j] = layers[layers.Length-1].weights[i, j].ToString();
             }
-            record = string.Join(", ", row);
+            record = string.Join(",", row);
             contents[i + 1] = record;//+1 for header
         }
         AppendAllLines(filepath, contents);
@@ -548,7 +560,50 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
 
     public static NeuralNet ReadFromFile(string filepath)
     {
-        return null;
+        //create empty net
+        NeuralNet net = new NeuralNet();
+        //read file
+        string[] contents = System.IO.File.ReadAllLines(filepath);
+        //split and assign net dimensions
+        string[] dimensions = contents[1].Split(',');
+        int numInputs = int.Parse(dimensions[0]);
+        int numOutputs = int.Parse(dimensions[1]);
+        int numHiddenLayers = int.Parse(dimensions[2]);
+        int hiddenLayerSize = int.Parse(dimensions[3]);
+        net.NumInputs = numInputs;
+        net.NumOutputs = numOutputs;
+        net.NumHiddenLayers = numHiddenLayers;
+        net.HiddenLayerSize = hiddenLayerSize;
+        //create and fill array of layers
+        Layer[] layers = new Layer[numHiddenLayers + 1];
+        for (int i = 0; i < numHiddenLayers + 1; i++)//+1 for output layer
+        {
+            if (i == 0)//first hidden layer
+            {
+                double[,] newWeights = new double[hiddenLayerSize, numInputs + 1];//create empty container, +1 for bias
+                for (int j = 0; j < newWeights.GetLength(0); j++)//for each node
+                {
+                    string[] weights = contents[3 + i * (hiddenLayerSize + 1) + j].Split(',');//////////////double check this boi
+                    for (int k = 0; k < newWeights.GetLength(1); k++)//this will run for each weight and bias
+                    {
+                        newWeights[j, k] = double.Parse(weights[k]);
+                    }
+                }
+                layers[i] = new Layer(hiddenLayerSize, numOutputs, newWeights);//assign new weights to newLayers array in the form of a newly instantiated Layer
+            }
+
+            else if (i > 0 && i < net.NumHiddenLayers)//all other hidden layers
+            {
+                //todo
+            }
+
+            else if (i == net.NumHiddenLayers)//output layer
+            {
+                //todo
+            }
+        }
+        //return
+        return net;
     }
 
     private static void AppendAllLines(string filepath, string[] contents)
