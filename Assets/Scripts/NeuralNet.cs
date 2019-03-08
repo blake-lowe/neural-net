@@ -23,6 +23,11 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
         {
             return layers;
         }
+
+        set
+        {
+            layers = value;
+        }
     }
 
     public int NumInputs
@@ -558,8 +563,10 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
 
     }
 
-    public static NeuralNet ReadFromFile(string filepath)
+    public static NeuralNet ReadFromFile(string directory, string filename)
     {
+        string filetype = ".csv";
+        string filepath = directory + "/" + filename + filetype;
         //create empty net
         NeuralNet net = new NeuralNet();
         //read file
@@ -594,14 +601,35 @@ public class NeuralNet:IGeneticIndividual//a class which implements the Neural N
 
             else if (i > 0 && i < net.NumHiddenLayers)//all other hidden layers
             {
-                //todo
+                double[,] newWeights = new double[hiddenLayerSize, hiddenLayerSize + 1];//create empty container, +1 for bias
+                for (int j = 0; j < newWeights.GetLength(0); j++)
+                {
+                    string[] weights = contents[3 + i * (hiddenLayerSize + 1) + j].Split(',');
+                    for (int k = 0; k < newWeights.GetLength(1); k++)//this will run for each weight and bias
+                    {
+                        
+                        newWeights[j, k] = double.Parse(weights[k]);
+                    }
+                }
+                layers[i] = new Layer(numInputs, hiddenLayerSize, newWeights);//assign new weights to newLayers array in the form of a newly instantiated Layer
             }
 
             else if (i == net.NumHiddenLayers)//output layer
             {
-                //todo
+                double[,] newWeights = new double[numOutputs, hiddenLayerSize + 1];//create empty container, +1 for bias
+                for (int j = 0; j < newWeights.GetLength(0); j++)
+                {
+                    string[] weights = contents[3 + i * (hiddenLayerSize + 1) + j].Split(',');
+                    for (int k = 0; k < newWeights.GetLength(1); k++)//this will run for each weight and bias
+                    {
+                        newWeights[j, k] = double.Parse(weights[k]);//copy the value from the active aprent
+                    }
+                }
+                layers[i] = new Layer(hiddenLayerSize, numOutputs, newWeights);//assign new weights to newLayers array in the form of a newly instantiated Layer
             }
         }
+        //attach layers to new net
+        net.Layers = layers;
         //return
         return net;
     }
