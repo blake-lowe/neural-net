@@ -4664,7 +4664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab12f65f895bbea4db99e01ec7a8f1d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLineNum: 5
+  maxLineNum: 8
   m_MaxPointNum: 65535
   m_CentimeterPerMark: 1
   m_CentimeterPerCoordUnitX: 1
