@@ -7,6 +7,7 @@ public class VisualNet : MonoBehaviour {//A unity MonoBehaviour/script designed 
     public Vector3 origin;
     public float layerSeparation;
     public float nodeSeparation;
+    public float scale;
 
     public GameObject nodeParent;//should be empty gameObject
     public GameObject weightParent;//should be empty gameObject
