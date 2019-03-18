@@ -75,7 +75,6 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public void configDone()
     {
         setupUI();
-        setupUI();
         configPanel.SetActive(false);
     }
 }
