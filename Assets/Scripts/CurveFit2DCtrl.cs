@@ -31,8 +31,15 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public float vNetXArea;
     public float vNetYArea;
 
-	// Use this for initialization
-	void Start ()
+    public GameObject configPanel;
+
+    // Use this for initialization
+    void Start()
+    {
+        configPanel.SetActive(true);
+    }
+
+    private void setupUI()
     {
         testInputSets = new double[numTestPoints, 1];
         testOutputSets = new double[numTestPoints, 1];
@@ -61,6 +68,13 @@ public class CurveFit2DCtrl : MonoBehaviour {
     {
         if (function == "constant") { return 0.5f; }
         else if (function == "linear"){ return x; }
+        else if (function == "neglinear") { return 1f - x; }
         else { return 0f; }
+    }
+
+    public void configDone()
+    {
+        setupUI();
+        configPanel.SetActive(false);
     }
 }
