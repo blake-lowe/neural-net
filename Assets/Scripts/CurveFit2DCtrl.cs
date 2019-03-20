@@ -26,16 +26,18 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
     public string function;//name of function to be approximated
 
-    public NeuralNet bestNet;
+    public NeuralNet bestNet;//the highest fitness solution
 
     public VisualNet visualNet;
-    public float vNetXArea;
+    public float vNetXArea;//area devoted to the net visualization
     public float vNetYArea;
 
-    public GameObject configPanel;
+    public GameObject configPanel;//fields to be filled by unity editor
+
     public InputField populationField;
     public InputField numParentsField;
     public InputField numCrossoverPointsField;
+    public InputField mutationChanceField;
     public InputField environmentalPressureField;
     public InputField eliteFractionField;
     public InputField tournamentSizeField;
@@ -44,7 +46,7 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public InputField hiddenLayerSizeField;
     public InputField numPointsField;
     public InputField numTestPointsField;
-    public Dropdown functionDropdown;
+    public Dropdown functionDropdown;//end fields
 
     // Use this for initialization
     void Start()
@@ -54,6 +56,18 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
     private void setupUI()
     {
+        //pull info from input fields
+        //ga
+        populationSize = int.Parse(populationField.text);
+        numParents = int.Parse(numParentsField.text);
+        numCrossoverPoints = int.Parse(numCrossoverPointsField.text);
+        mutationChance = float.Parse(mutationChanceField.text);
+        environmentalPressure = float.Parse(environmentalPressureField.text);
+        eliteFraction = float.Parse(eliteFractionField.text);
+        tournamentSize = int.Parse(tournamentSizeField.text);
+        //nn
+        //TODO
+
         testInputSets = new double[numTestPoints, 1];
         testOutputSets = new double[numTestPoints, 1];
         for (int i = 0; i < numTestPoints; i++)
