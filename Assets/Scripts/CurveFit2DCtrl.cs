@@ -48,6 +48,13 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public InputField numTestPointsField;
     public Dropdown functionDropdown;//end fields
 
+    public Text functionContent;//hud field
+
+    public GameObject configDoneButton;
+    public GameObject configCloseButton;
+
+    public GameObject HUDContainer;
+
     // Use this for initialization
     void Start()
     {
@@ -66,8 +73,51 @@ public class CurveFit2DCtrl : MonoBehaviour {
         eliteFraction = float.Parse(eliteFractionField.text);
         tournamentSize = int.Parse(tournamentSizeField.text);
         //nn
-        //TODO
+        numHiddenLayers = int.Parse(numHiddenLayersField.text);
+        hiddenLayerSize = int.Parse(hiddenLayerSizeField.text);
+        numPoints = int.Parse(numPointsField.text);
+        numTestPoints = int.Parse(numTestPointsField.text);
 
+        switch (functionDropdown.value)//convert dropdown value to function name
+        {
+            case 0:
+                function = "constant";
+                break;
+            case 1:
+                function = "linear";
+                break;
+            case 2:
+                function = "negativeLinear";
+                break;
+            case 3:
+                function = "piecewiseLinear";
+                break;
+            case 4:
+                function = "quadratic";
+                break;
+            case 5:
+                function = "cubic";
+                break;
+            case 6:
+                function = "squareRoot";
+                break;
+            case 7:
+                function = "exponential";
+                break;
+            case 8:
+                function = "sine";
+                break;
+            case 9:
+                function = "cosine";
+                break;
+            default:
+                function = "null";
+                break;
+        }
+
+        functionContent.text = function;
+
+        //generate test inputs and outputs from correct function and based on numTestPoints
         testInputSets = new double[numTestPoints, 1];
         testOutputSets = new double[numTestPoints, 1];
         for (int i = 0; i < numTestPoints; i++)
@@ -116,6 +166,35 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public void configDone()
     {
         setupUI();
+        HUDContainer.SetActive(true);
         configPanel.SetActive(false);
+    }
+
+    public void configClose()
+    {
+        configPanel.SetActive(false);
+        HUDContainer.SetActive(true);
+    }
+
+    public void showDetails()
+    {
+        populationField.readOnly = true;
+        numParentsField.readOnly = true;
+        numCrossoverPointsField.readOnly = true;
+        mutationChanceField.readOnly = true;
+        environmentalPressureField.readOnly = true;
+        eliteFractionField.readOnly = true;
+        tournamentSizeField.readOnly = true;
+
+        numHiddenLayersField.readOnly = true;
+        hiddenLayerSizeField.readOnly = true;
+        numPointsField.readOnly = true;
+        numTestPointsField.readOnly = true;
+        functionDropdown.interactable = false;
+
+        HUDContainer.SetActive(false);
+        configPanel.SetActive(true);
+        configCloseButton.SetActive(true);
+        configDoneButton.SetActive(false);
     }
 }
