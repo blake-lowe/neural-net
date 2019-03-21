@@ -18,6 +18,8 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
     private int numReproductionPairs;//filled by constructor
     public IGeneticIndividual[] individuals;//array to hold population
 
+    public int generationCount = 0;
+
     public GeneticAlgorithm(IGeneticIndividual progenitor, int populationSize, int numParents, float environmentalPressure, float eliteFraction, int numCrossoverPoints, float mutationChance, int tournamentSize)//initialization of arrays and variables
     {
         this.populationSize = populationSize;
@@ -62,6 +64,7 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
     {
         for (int i = 0; i < numGenerations; i++)
         {
+            generationCount++;
             //create elite array
             IGeneticIndividual[] eliteIndividuals = new IGeneticIndividual[numToSave];
             for (int j = 0; j < numToSave; j++)
