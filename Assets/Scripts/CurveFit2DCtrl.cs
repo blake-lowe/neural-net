@@ -18,6 +18,8 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
     private GeneticAlgorithm ga;
 
+    public bool isRunning = false;
+
     public int numPoints;   //
     public int numTestPoints;   //
 
@@ -54,6 +56,12 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public GameObject configCloseButton;
 
     public GameObject HUDContainer;
+
+    public InputField directoryField;
+    public InputField filenameField;
+
+    public Button pauseButton;
+    public Button runButton;
 
     // Use this for initialization
     void Start()
@@ -127,7 +135,7 @@ public class CurveFit2DCtrl : MonoBehaviour {
         }
 
         NeuralNet net = new NeuralNet(1, 1, numHiddenLayers, hiddenLayerSize, testInputSets, testOutputSets);//create net with test sets filled
-
+        bestNet = net;
         visualNet.net = net;
         visualNet.layerSeparation = vNetXArea / (numHiddenLayers + 1);
         visualNet.nodeSeparation = vNetYArea / (hiddenLayerSize + 1);
@@ -197,4 +205,24 @@ public class CurveFit2DCtrl : MonoBehaviour {
         configCloseButton.SetActive(true);
         configDoneButton.SetActive(false);
     }
+
+    public void saveAsCSV()
+    {
+        bestNet.WriteToFile(directoryField.text, filenameField.text);
+    }
+
+    public void pause()
+    {
+        isRunning = false;
+        pauseButton.interactable = false;
+        runButton.interactable = true;
+    }
+
+    public void run()
+    {
+        isRunning = true;
+        pauseButton.interactable = true;
+        runButton.interactable = false;
+    }
+
 }
