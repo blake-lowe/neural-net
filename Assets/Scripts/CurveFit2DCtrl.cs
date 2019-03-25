@@ -19,6 +19,7 @@ public class CurveFit2DCtrl : MonoBehaviour {
     private GeneticAlgorithm ga;
 
     public bool isRunning = false;
+    public bool isFitnessControl = false;
 
     public int numPoints;   //
     public int numTestPoints;   //
@@ -62,6 +63,9 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
     public Button pauseButton;
     public Button runButton;
+
+    public Button generationControlButton;
+    public Button fitnessControlButton;
 
     // Use this for initialization
     void Start()
@@ -223,6 +227,20 @@ public class CurveFit2DCtrl : MonoBehaviour {
         isRunning = true;
         pauseButton.interactable = true;
         runButton.interactable = false;
+    }
+
+    public void enableGenerationControl()
+    {
+        isFitnessControl = false;
+        fitnessControlButton.interactable = true;
+        generationControlButton.interactable = false;
+    }
+
+    public void enableFitnessControl()
+    {
+        isFitnessControl = true;
+        fitnessControlButton.interactable = false;
+        generationControlButton.interactable = true;
     }
 
 }
