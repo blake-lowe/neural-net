@@ -18,8 +18,12 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
     private GeneticAlgorithm ga;
 
+    private bool isGAInitialized = false;
     public bool isRunning = false;
     public bool isFitnessControl = false;
+
+    public int targetGeneration = 0;
+    public float targetFitness = 0;
 
     public int numPoints;   //
     public int numTestPoints;   //
@@ -53,6 +57,8 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
     public Text functionContent;//hud field
 
+    public Text fitnessContent;
+
     public GameObject configDoneButton;
     public GameObject configCloseButton;
 
@@ -64,13 +70,62 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public Button pauseButton;
     public Button runButton;
 
+    public Toggle subtractToggle;
+
+    public Text currentGenerationContent;
+
     public Button generationControlButton;
     public Button fitnessControlButton;
+
+    public InputField targetGenerationField;
+    public InputField targetFitnessField;
 
     // Use this for initialization
     void Start()
     {
         configPanel.SetActive(true);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (isGAInitialized)
+        {
+            currentGenerationContent.text = ga.generationCount.ToString();
+            if (isRunning)
+            {
+                if (isFitnessControl)//fitness control
+                {
+                    if (bestNet.Fitness() < targetFitness)
+                    {
+                        //call training ga
+                        bestNet = (NeuralNet)ga.TrainGeneration(1);
+                        //update fitness graph
+                        fitnessContent.text = bestNet.Fitness().ToString();
+                        //TODO
+                        //update vnet net
+                        visualNet.net = bestNet;
+                        //update graphs
+                        //todo
+                    }
+                }
+                else//generation control
+                {
+                    if (int.Parse(currentGenerationContent.text) < targetGeneration)
+                    {
+                        //call training ga
+                        bestNet = (NeuralNet)ga.TrainGeneration(1);
+                        //update fitness graph
+                        fitnessContent.text = bestNet.Fitness().ToString();
+                        //TODO
+                        //update vnet net
+                        visualNet.net = bestNet;
+                        //update graphs
+                        //todo
+                    }
+                }
+            }
+        }
     }
 
     private void setupUI()
@@ -144,14 +199,9 @@ public class CurveFit2DCtrl : MonoBehaviour {
         visualNet.layerSeparation = vNetXArea / (numHiddenLayers + 1);
         visualNet.nodeSeparation = vNetYArea / (hiddenLayerSize + 1);
         visualNet.Initialize();
+        //todo initialize GA with constructor
+        isGAInitialized = true;
     }
-
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
-	}
 
     private float functionEvaluate(float x)
     {
@@ -234,6 +284,8 @@ public class CurveFit2DCtrl : MonoBehaviour {
         isFitnessControl = false;
         fitnessControlButton.interactable = true;
         generationControlButton.interactable = false;
+        targetFitnessField.interactable = false;
+        targetGenerationField.interactable = true;
     }
 
     public void enableFitnessControl()
@@ -241,6 +293,45 @@ public class CurveFit2DCtrl : MonoBehaviour {
         isFitnessControl = true;
         fitnessControlButton.interactable = false;
         generationControlButton.interactable = true;
+        targetFitnessField.interactable = true;
+        targetGenerationField.interactable = false;
+    }
+
+    public void updateTargetGeneration()
+    {
+        targetGeneration = int.Parse(targetGenerationField.text);
+    }
+
+    public void addGenerations1()
+    {
+        int n;
+        if (subtractToggle.isOn) n = -1;
+        else n = 1;
+        targetGenerationField.text = (int.Parse(targetGenerationField.text) + n).ToString();
+        updateTargetGeneration();
+    }
+
+    public void addGenerations10()
+    {
+        int n;
+        if (subtractToggle.isOn) n = -10;
+        else n = 10;
+        targetGenerationField.text = (int.Parse(targetGenerationField.text) + n).ToString();
+        updateTargetGeneration();
+    }
+
+    public void addGenerations100()
+    {
+        int n;
+        if (subtractToggle.isOn) n = -100;
+        else n = 100;
+        targetGenerationField.text = (int.Parse(targetGenerationField.text) + n).ToString();
+        updateTargetGeneration();
+    }
+
+    public void updateTargetFitness()
+    {
+        targetFitness = float.Parse(targetFitnessField.text);
     }
 
 }
