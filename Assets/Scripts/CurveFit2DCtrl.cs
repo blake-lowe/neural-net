@@ -194,13 +194,14 @@ public class CurveFit2DCtrl : MonoBehaviour {
         }
 
         NeuralNet net = new NeuralNet(1, 1, numHiddenLayers, hiddenLayerSize, testInputSets, testOutputSets);//create net with test sets filled
-        bestNet = net;
-        visualNet.net = net;
+        ga = new GeneticAlgorithm(net, populationSize, numParents, environmentalPressure, eliteFraction, numCrossoverPoints, mutationChance, tournamentSize);
+        isGAInitialized = true;
+        bestNet = (NeuralNet) ga.individuals[0];
+        visualNet.net = bestNet;
         visualNet.layerSeparation = vNetXArea / (numHiddenLayers + 1);
         visualNet.nodeSeparation = vNetYArea / (hiddenLayerSize + 1);
         visualNet.Initialize();
-        //todo initialize GA with constructor
-        isGAInitialized = true;
+        
     }
 
     private float functionEvaluate(float x)

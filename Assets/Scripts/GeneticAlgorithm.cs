@@ -35,6 +35,7 @@ public class GeneticAlgorithm {//a general class describing a Genetic Algorithm.
 
         individuals = new IGeneticIndividual[populationSize];
         Initialize(progenitor);
+        FitnessSort();
     }
 
     private void Initialize(IGeneticIndividual progenitor)//called by constructor//randomly decide the aspects of each individual in individuals.
