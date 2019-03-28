@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Vectrosity;
 
 public class CurveFit2DCtrl : MonoBehaviour {
 
@@ -80,6 +81,11 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public InputField targetGenerationField;
     public InputField targetFitnessField;
 
+    public VectorLine targetFunctionLine;
+    public VectorLine NNFunctionLine;
+    public Vector2 functionsOrigin;
+    public Vector2 functionsScale;
+
     // Use this for initialization
     void Start()
     {
@@ -105,7 +111,8 @@ public class CurveFit2DCtrl : MonoBehaviour {
                         //TODO
                         //update vnet net
                         visualNet.net = bestNet;
-                        //update graphs
+                        //update function curves
+                        drawNNFunction();
                         //todo
                     }
                 }
@@ -120,7 +127,8 @@ public class CurveFit2DCtrl : MonoBehaviour {
                         //TODO
                         //update vnet net
                         visualNet.net = bestNet;
-                        //update graphs
+                        //update function curves
+                        drawNNFunction();
                         //todo
                     }
                 }
@@ -201,7 +209,35 @@ public class CurveFit2DCtrl : MonoBehaviour {
         visualNet.layerSeparation = vNetXArea / (numHiddenLayers + 1);
         visualNet.nodeSeparation = vNetYArea / (hiddenLayerSize + 1);
         visualNet.Initialize();
-        
+
+        targetFunctionLine = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f);
+        NNFunctionLine = new VectorLine("NNFunctionLine", new List<Vector2>(), 2.0f);
+
+        drawTargetFunction();
+        drawNNFunction();
+    }
+
+    public void drawTargetFunction()
+    {
+        for (int i = 0; i < numPoints; i++)
+        {
+            float newPointX = ((float)i / (float)numPoints);
+            float newPointY = functionEvaluate(newPointX);
+            targetFunctionLine.points2.Add(new Vector2(functionsOrigin.x + newPointX * functionsScale.x, functionsOrigin.y + newPointY*functionsScale.y));
+        }
+        targetFunctionLine.Draw();
+    }
+
+    public void drawNNFunction()
+    {
+        NNFunctionLine.points2.Clear();
+        for (int i = 0; i < numPoints; i++)
+        {
+            float newPointX = ((float)i / (float)numPoints);
+            float newPointY = (float) bestNet.FeedForward(new double[] { newPointX })[0];
+            NNFunctionLine.points2.Add(new Vector2(functionsOrigin.x + newPointX * functionsScale.x, functionsOrigin.y + newPointY * functionsScale.y));
+        }
+        NNFunctionLine.Draw();
     }
 
     private float functionEvaluate(float x)
