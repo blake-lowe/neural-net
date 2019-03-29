@@ -81,10 +81,11 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public InputField targetGenerationField;
     public InputField targetFitnessField;
 
-    public VectorLine targetFunctionLine;
-    public VectorLine NNFunctionLine;
+    private VectorLine targetFunctionLine;
+    private VectorLine NNFunctionLine;
     public Vector2 functionsOrigin;
     public Vector2 functionsScale;
+
 
     // Use this for initialization
     void Start()
@@ -98,6 +99,11 @@ public class CurveFit2DCtrl : MonoBehaviour {
         if (isGAInitialized)
         {
             currentGenerationContent.text = ga.generationCount.ToString();
+            if (int.Parse(currentGenerationContent.text) > targetGeneration)
+            {
+                targetGeneration = int.Parse(currentGenerationContent.text);
+                targetGenerationField.text = currentGenerationContent.text;
+            }
             if (isRunning)
             {
                 if (isFitnessControl)//fitness control
@@ -113,7 +119,6 @@ public class CurveFit2DCtrl : MonoBehaviour {
                         visualNet.net = bestNet;
                         //update function curves
                         drawNNFunction();
-                        //todo
                     }
                 }
                 else//generation control
@@ -129,7 +134,6 @@ public class CurveFit2DCtrl : MonoBehaviour {
                         visualNet.net = bestNet;
                         //update function curves
                         drawNNFunction();
-                        //todo
                     }
                 }
             }
@@ -210,8 +214,8 @@ public class CurveFit2DCtrl : MonoBehaviour {
         visualNet.nodeSeparation = vNetYArea / (hiddenLayerSize + 1);
         visualNet.Initialize();
 
-        targetFunctionLine = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f);
-        NNFunctionLine = new VectorLine("NNFunctionLine", new List<Vector2>(), 2.0f);
+        targetFunctionLine = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
+        NNFunctionLine = new VectorLine("NNFunctionLine", new List<Vector2>(), 2.0f, LineType.Points);
 
         drawTargetFunction();
         drawNNFunction();
@@ -221,11 +225,13 @@ public class CurveFit2DCtrl : MonoBehaviour {
     {
         for (int i = 0; i < numPoints; i++)
         {
-            float newPointX = ((float)i / (float)numPoints);
+            float newPointX = ((float)i / (float)(numPoints-1));
             float newPointY = functionEvaluate(newPointX);
             targetFunctionLine.points2.Add(new Vector2(functionsOrigin.x + newPointX * functionsScale.x, functionsOrigin.y + newPointY*functionsScale.y));
         }
+        
         targetFunctionLine.Draw();
+        targetFunctionLine.SetColor(Color.blue);
     }
 
     public void drawNNFunction()
@@ -233,11 +239,13 @@ public class CurveFit2DCtrl : MonoBehaviour {
         NNFunctionLine.points2.Clear();
         for (int i = 0; i < numPoints; i++)
         {
-            float newPointX = ((float)i / (float)numPoints);
+            float newPointX = ((float)i / (float)(numPoints-1));
             float newPointY = (float) bestNet.FeedForward(new double[] { newPointX })[0];
             NNFunctionLine.points2.Add(new Vector2(functionsOrigin.x + newPointX * functionsScale.x, functionsOrigin.y + newPointY * functionsScale.y));
         }
+        
         NNFunctionLine.Draw();
+        NNFunctionLine.SetColor(Color.red);
     }
 
     private float functionEvaluate(float x)
