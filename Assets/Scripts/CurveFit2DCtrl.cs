@@ -86,6 +86,9 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public Vector2 functionsOrigin;
     public Vector2 functionsScale;
 
+    public InputField NNInputField;
+    public Text NNOutputContent;
+
 
     // Use this for initialization
     void Start()
@@ -219,6 +222,9 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
         drawTargetFunction();
         drawNNFunction();
+
+        NNInputField.text = "0";
+        updateNNOutput();
     }
 
     public void drawTargetFunction()
@@ -246,6 +252,8 @@ public class CurveFit2DCtrl : MonoBehaviour {
         
         NNFunctionLine.Draw();
         NNFunctionLine.SetColor(Color.red);
+
+        updateNNOutput();
     }
 
     private float functionEvaluate(float x)
@@ -379,4 +387,10 @@ public class CurveFit2DCtrl : MonoBehaviour {
         targetFitness = float.Parse(targetFitnessField.text);
     }
 
+    public void updateNNOutput()
+    {
+        float input = float.Parse(NNInputField.text);
+        float output = (float)bestNet.FeedForward(new double[] { input })[0];
+        NNOutputContent.text = output.ToString();
+    }
 }
