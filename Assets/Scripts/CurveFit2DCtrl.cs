@@ -389,7 +389,16 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
     public void updateNNOutput()
     {
-        float input = float.Parse(NNInputField.text);
+        float input;
+        if(float.TryParse(NNInputField.text, out input))
+        {
+            input = float.Parse(NNInputField.text);
+        }
+        else
+        {
+            NNInputField.text = "0";
+            input = 0;
+        }
         float output = (float)bestNet.FeedForward(new double[] { input })[0];
         NNOutputContent.text = output.ToString();
     }
