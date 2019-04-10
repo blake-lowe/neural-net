@@ -94,6 +94,7 @@ public class CurveFit2DCtrl : MonoBehaviour {
     void Start()
     {
         configPanel.SetActive(true);
+        VectorLine.canvas.sortingOrder = -1;
     }
 
     // Update is called once per frame
@@ -204,7 +205,7 @@ public class CurveFit2DCtrl : MonoBehaviour {
         testOutputSets = new double[numTestPoints, 1];
         for (int i = 0; i < numTestPoints; i++)
         {
-            testInputSets[i, 0] = 0 + i * (1 - 0) / numTestPoints;
+            testInputSets[i, 0] = (float)i * (1f / (float)numTestPoints);
             testOutputSets[i, 0] = functionEvaluate((float)testInputSets[i, 0]);
         }
 
@@ -275,7 +276,10 @@ public class CurveFit2DCtrl : MonoBehaviour {
         else if (function == "exponential") { return Mathf.Exp(x); }
         else if (function == "sine") { return Mathf.Sin(x); }
         else if (function == "cosine") { return Mathf.Cos(x); }
-        else { return 0f; }
+        else {
+            Debug.Log("Function Evaluate Error");
+            return 0f;
+        }
     }
 
     public void configDone()
