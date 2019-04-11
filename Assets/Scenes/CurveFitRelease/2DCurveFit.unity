@@ -7702,6 +7702,8 @@ MonoBehaviour:
   functionsScale: {x: 225, y: 225}
   NNInputField: {fileID: 1589380944}
   NNOutputContent: {fileID: 334646983}
+  fitnessHistoryOrigin: {x: 500, y: 0}
+  fitnessHistoryScale: {x: 225, y: 225}
 --- !u!4 &1510367286
 Transform:
   m_ObjectHideFlags: 0
@@ -11301,7 +11303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2085553891
 RectTransform:
   m_ObjectHideFlags: 0

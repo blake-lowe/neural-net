@@ -89,6 +89,11 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public InputField NNInputField;
     public Text NNOutputContent;
 
+    private VectorLine fitnessHistoryLine;
+    public Vector2 fitnessHistoryOrigin;
+    public Vector2 fitnessHistoryScale;
+    private float fitnessHistoryXStep;
+
 
     // Use this for initialization
     void Start()
@@ -220,9 +225,11 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
         targetFunctionLine = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
         NNFunctionLine = new VectorLine("NNFunctionLine", new List<Vector2>(), 2.0f, LineType.Points);
+        fitnessHistoryLine = new VectorLine("fitnessHistoryLine", new List<Vector2>(), 2.0f, LineType.Continuous);
 
         drawTargetFunction();
         drawNNFunction();
+        drawFitnessHistory();
 
         NNInputField.text = "0";
         updateNNOutput();
@@ -282,6 +289,30 @@ public class CurveFit2DCtrl : MonoBehaviour {
         }
     }
 
+    private void drawFitnessHistory()
+    {
+        Vector2[] pointsRecord = new Vector2[fitnessHistoryLine.points2.Count];
+        fitnessHistoryLine.points2.CopyTo(pointsRecord);
+        float[] fitnessRecord = new float[pointsRecord.Length + 1];
+        for (int i = 0; i < pointsRecord.Length; i++)
+        {
+            fitnessRecord[i] = pointsRecord[i].y;
+        }
+        fitnessRecord[fitnessRecord.Length - 1] = (float) ((bestNet.Fitness()+bestNet.numOutputs)*fitnessHistoryScale.y);
+
+        fitnessHistoryLine.points2.Clear();
+        fitnessHistoryXStep = fitnessHistoryScale.x / ((float) fitnessRecord.Length);
+
+        for (int i = 0; i < fitnessRecord.Length; i++)
+        {
+            float newPointX = fitnessHistoryOrigin.x + (float)i * fitnessHistoryXStep;
+            float newPointY = fitnessHistoryOrigin.y + fitnessRecord[i];
+            fitnessHistoryLine.points2.Add(new Vector2(newPointX, newPointY));
+        }
+        fitnessHistoryLine.Draw();
+        fitnessHistoryLine.SetColor(Color.white);
+    }
+
     public void configDone()
     {
         setupUI();
@@ -297,6 +328,7 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
     public void showDetails()
     {
+        //convert fields to be uneditable
         populationField.readOnly = true;
         numParentsField.readOnly = true;
         numCrossoverPointsField.readOnly = true;
@@ -304,13 +336,13 @@ public class CurveFit2DCtrl : MonoBehaviour {
         environmentalPressureField.readOnly = true;
         eliteFractionField.readOnly = true;
         tournamentSizeField.readOnly = true;
-
         numHiddenLayersField.readOnly = true;
         hiddenLayerSizeField.readOnly = true;
         numPointsField.readOnly = true;
         numTestPointsField.readOnly = true;
         functionDropdown.interactable = false;
 
+        //hide hud and show config panel
         HUDContainer.SetActive(false);
         configPanel.SetActive(true);
         configCloseButton.SetActive(true);
