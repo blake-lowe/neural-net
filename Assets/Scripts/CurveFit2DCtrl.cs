@@ -233,9 +233,9 @@ public class CurveFit2DCtrl : MonoBehaviour {
         NNFunctionLine = new VectorLine("NNFunctionLine", new List<Vector2>(), 2.0f, LineType.Points);
         fitnessHistoryLine = new VectorLine("fitnessHistoryLine", new List<Vector2>(), 2.0f, LineType.Continuous);
         VectorLine fitHistAxesLine = new VectorLine("fitHistAxesLine", new List<Vector2>(), 2.0f, LineType.Continuous);
-        fitHistAxesLine.points2.Add(new Vector2(400, 500));
-        fitHistAxesLine.points2.Add(new Vector2(400, 30));
-        fitHistAxesLine.points2.Add(new Vector2(800, 30));
+        fitHistAxesLine.points2.Add(new Vector2(495, 230));
+        fitHistAxesLine.points2.Add(new Vector2(495, 25));
+        fitHistAxesLine.points2.Add(new Vector2(900, 25));
 
         drawTargetFunction();
         drawNNFunction();

@@ -1959,7 +1959,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 92.44, y: -203.2}
+  m_AnchoredPosition: {x: 92.44, y: -221.1}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &332409081
@@ -7780,8 +7780,8 @@ MonoBehaviour:
   functionsScale: {x: 225, y: 225}
   NNInputField: {fileID: 1589380944}
   NNOutputContent: {fileID: 334646983}
-  fitnessHistoryOrigin: {x: 500, y: 0}
-  fitnessHistoryScale: {x: 400, y: 225}
+  fitnessHistoryOrigin: {x: 495, y: 25}
+  fitnessHistoryScale: {x: 405, y: 205}
 --- !u!4 &1510367286
 Transform:
   m_ObjectHideFlags: 0
@@ -9003,7 +9003,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 246.5, y: -239.7}
+  m_AnchoredPosition: {x: 246.5, y: -255.3}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1743817954
@@ -10528,7 +10528,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 93.9, y: -51.7}
+  m_AnchoredPosition: {x: 93.9, y: -47.4}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1941206414
