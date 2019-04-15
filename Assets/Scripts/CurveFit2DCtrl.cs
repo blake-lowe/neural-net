@@ -248,12 +248,13 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
     public void drawTargetFunction()
     {
-        for (int i = 0; i < numPoints; i++)
+        for (int i = 0; i < numPoints-1; i++)
         {
             float newPointX = ((float)i / (float)(numPoints-1));
             float newPointY = functionEvaluate(newPointX);
             targetFunctionLine.points2.Add(new Vector2(functionsOrigin.x + newPointX * functionsScale.x, functionsOrigin.y + newPointY*functionsScale.y));
         }
+        //add endpoint
         
         targetFunctionLine.Draw();
         targetFunctionLine.SetColor(Color.blue);
@@ -304,7 +305,7 @@ public class CurveFit2DCtrl : MonoBehaviour {
     {
         fitnessRecord.Add((float)bestNet.Fitness());
         fitnessHistoryLine.points2.Clear();
-        fitnessHistoryXStep = fitnessHistoryScale.x / ((float)fitnessRecord.Count);
+        fitnessHistoryXStep = fitnessHistoryScale.x / ((float)fitnessRecord.Count - 1);
 
         for (int i = 0; i < fitnessRecord.Count; i++)
         {
