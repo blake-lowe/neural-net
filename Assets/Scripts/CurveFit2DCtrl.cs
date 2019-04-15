@@ -94,6 +94,8 @@ public class CurveFit2DCtrl : MonoBehaviour {
     public Vector2 fitnessHistoryScale;
     private float fitnessHistoryXStep;
 
+    private List<float> fitnessRecord = new List<float>();
+
 
     // Use this for initialization
     void Start()
@@ -128,6 +130,8 @@ public class CurveFit2DCtrl : MonoBehaviour {
                         visualNet.net = bestNet;
                         //update function curves
                         drawNNFunction();
+                        //updateFitnessHistoryGraph
+                        drawFitnessHistory();
                     }
                 }
                 else//generation control
@@ -143,6 +147,8 @@ public class CurveFit2DCtrl : MonoBehaviour {
                         visualNet.net = bestNet;
                         //update function curves
                         drawNNFunction();
+                        //updateFitnessHistoryGraph
+                        drawFitnessHistory();
                     }
                 }
             }
@@ -226,10 +232,15 @@ public class CurveFit2DCtrl : MonoBehaviour {
         targetFunctionLine = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
         NNFunctionLine = new VectorLine("NNFunctionLine", new List<Vector2>(), 2.0f, LineType.Points);
         fitnessHistoryLine = new VectorLine("fitnessHistoryLine", new List<Vector2>(), 2.0f, LineType.Continuous);
+        VectorLine fitHistAxesLine = new VectorLine("fitHistAxesLine", new List<Vector2>(), 2.0f, LineType.Continuous);
+        fitHistAxesLine.points2.Add(new Vector2(400, 500));
+        fitHistAxesLine.points2.Add(new Vector2(400, 30));
+        fitHistAxesLine.points2.Add(new Vector2(800, 30));
 
         drawTargetFunction();
         drawNNFunction();
         drawFitnessHistory();
+        fitHistAxesLine.Draw();
 
         NNInputField.text = "0";
         updateNNOutput();
@@ -291,26 +302,23 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
     private void drawFitnessHistory()
     {
-        Vector2[] pointsRecord = new Vector2[fitnessHistoryLine.points2.Count];
-        fitnessHistoryLine.points2.CopyTo(pointsRecord);
-        float[] fitnessRecord = new float[pointsRecord.Length + 1];
-        for (int i = 0; i < pointsRecord.Length; i++)
-        {
-            fitnessRecord[i] = pointsRecord[i].y;
-        }
-        fitnessRecord[fitnessRecord.Length - 1] = (float) ((bestNet.Fitness()+bestNet.numOutputs)*fitnessHistoryScale.y);
-
+        fitnessRecord.Add((float)bestNet.Fitness());
         fitnessHistoryLine.points2.Clear();
-        fitnessHistoryXStep = fitnessHistoryScale.x / ((float) fitnessRecord.Length);
+        fitnessHistoryXStep = fitnessHistoryScale.x / ((float)fitnessRecord.Count);
 
-        for (int i = 0; i < fitnessRecord.Length; i++)
+        for (int i = 0; i < fitnessRecord.Count; i++)
         {
             float newPointX = fitnessHistoryOrigin.x + (float)i * fitnessHistoryXStep;
-            float newPointY = fitnessHistoryOrigin.y + fitnessRecord[i];
+            float newPointY = fitnessHistoryOrigin.y + (fitnessRecord[i]+bestNet.numOutputs)*fitnessHistoryScale.y;
             fitnessHistoryLine.points2.Add(new Vector2(newPointX, newPointY));
         }
-        fitnessHistoryLine.Draw();
-        fitnessHistoryLine.SetColor(Color.white);
+
+        if (fitnessHistoryLine.points2.Count >= 2)
+        {
+            fitnessHistoryLine.Draw();
+            fitnessHistoryLine.SetColor(Color.green);
+        }
+
     }
 
     public void configDone()
