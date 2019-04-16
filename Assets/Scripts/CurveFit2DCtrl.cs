@@ -196,12 +196,9 @@ public class CurveFit2DCtrl : MonoBehaviour {
                 function = "squareRoot";
                 break;
             case 7:
-                function = "exponential";
-                break;
-            case 8:
                 function = "sine";
                 break;
-            case 9:
+            case 8:
                 function = "cosine";
                 break;
             default:
@@ -214,9 +211,9 @@ public class CurveFit2DCtrl : MonoBehaviour {
         //generate test inputs and outputs from correct function and based on numTestPoints
         testInputSets = new double[numTestPoints, 1];
         testOutputSets = new double[numTestPoints, 1];
-        for (int i = 0; i < numTestPoints; i++)
+        for (int i = 0; i <= numTestPoints-1; i++)
         {
-            testInputSets[i, 0] = (float)i * (1f / (float)numTestPoints);
+            testInputSets[i, 0] = (float)i / (float)(numTestPoints - 1f);
             testOutputSets[i, 0] = functionEvaluate((float)testInputSets[i, 0]);
         }
 
@@ -248,13 +245,12 @@ public class CurveFit2DCtrl : MonoBehaviour {
 
     public void drawTargetFunction()
     {
-        for (int i = 0; i < numPoints-1; i++)
+        for (int i = 0; i <= numPoints-1; i++)
         {
-            float newPointX = ((float)i / (float)(numPoints-1));
+            float newPointX = ((float)i / (float)(numPoints - 1f));
             float newPointY = functionEvaluate(newPointX);
             targetFunctionLine.points2.Add(new Vector2(functionsOrigin.x + newPointX * functionsScale.x, functionsOrigin.y + newPointY*functionsScale.y));
         }
-        //add endpoint
         
         targetFunctionLine.Draw();
         targetFunctionLine.SetColor(Color.blue);
@@ -290,11 +286,10 @@ public class CurveFit2DCtrl : MonoBehaviour {
             else { return 0f; }
         }
         else if (function == "quadratic") { return x*x; }
-        else if (function == "cubic") { return x*x*x; }
+        else if (function == "cubic") { return (0.5f*Mathf.Pow(2f*x-1f, 3))+0.5f; }
         else if (function == "squareRoot") { return Mathf.Sqrt(x); }
-        else if (function == "exponential") { return Mathf.Exp(x); }
-        else if (function == "sine") { return Mathf.Sin(x); }
-        else if (function == "cosine") { return Mathf.Cos(x); }
+        else if (function == "sine") { return 0.5f*Mathf.Sin(2*Mathf.PI*x)+0.5f; }
+        else if (function == "cosine") { return 0.5f * Mathf.Cos(2 * Mathf.PI * x) + 0.5f; }
         else {
             Debug.Log("Function Evaluate Error");
             return 0f;
