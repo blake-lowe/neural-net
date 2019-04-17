@@ -10093,21 +10093,23 @@ MonoBehaviour:
     m_Options:
     - m_Text: Constant
       m_Image: {fileID: 0}
-    - m_Text: Linear
+    - m_Text: Linear X
       m_Image: {fileID: 0}
-    - m_Text: Negative Linear
+    - m_Text: Negative Linear X
       m_Image: {fileID: 0}
-    - m_Text: Piecewise Linear
+    - m_Text: Linear Y
       m_Image: {fileID: 0}
-    - m_Text: Quadratic
+    - m_Text: Negative Linear Y
       m_Image: {fileID: 0}
-    - m_Text: Cubic
+    - m_Text: Quadratic X
       m_Image: {fileID: 0}
-    - m_Text: Square Root
+    - m_Text: Quadratic Y
+      m_Image: {fileID: 0}
+    - m_Text: Saddle
+      m_Image: {fileID: 0}
+    - m_Text: Negative Saddle
       m_Image: {fileID: 0}
     - m_Text: Sine
-      m_Image: {fileID: 0}
-    - m_Text: Cosine
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

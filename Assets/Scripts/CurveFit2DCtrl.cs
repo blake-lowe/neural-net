@@ -100,6 +100,7 @@ public class CurveFit2DCtrl : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        Screen.SetResolution(960, 540, false);
         configPanel.SetActive(true);
         VectorLine.canvas.sortingOrder = -1;
     }
