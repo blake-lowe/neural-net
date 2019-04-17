@@ -216,8 +216,15 @@ public class CurveFit3DCtrl : MonoBehaviour
         //generate test inputs and outputs from correct function and based on numTestPoints
         testInputSets = new double[numTestPoints, 1];
         testOutputSets = new double[numTestPoints, 1];
-        for (int i = 0; i <= numTestPoints - 1; i++)
+        for (int i = 0; i <= numTestPoints - 1; i++)//x from 0 to 1
         {
+            for (int j = 0; j <= numTestPoints - 1; j++)//y from 0 to one
+            {
+                float x = (float)i / (float)(numTestPoints - 1f);
+                float y = (float)j / (float)(numTestPoints - 1f);
+                float z = functionEvaluate(x, y);
+                //assign to testSets
+            }
             testInputSets[i, 0] = (float)i / (float)(numTestPoints - 1f);
             testOutputSets[i, 0] = functionEvaluate((float)testInputSets[i, 0]);
         }
@@ -250,7 +257,7 @@ public class CurveFit3DCtrl : MonoBehaviour
 
     public void drawTargetFunction()
     {
-        for (int i = 0; i <= numPoints - 1; i++)
+        for (int i = 0; i <= numPoints - 1; i++)//TODO Fix
         {
             float newPointX = ((float)i / (float)(numPoints - 1f));
             float newPointY = functionEvaluate(newPointX);
@@ -261,7 +268,7 @@ public class CurveFit3DCtrl : MonoBehaviour
         targetFunctionLine.SetColor(Color.blue);
     }
 
-    public void drawNNFunction()
+    public void drawNNFunction()//TODO Fix
     {
         NNFunctionLine.points2.Clear();
         for (int i = 0; i < numPoints; i++)
