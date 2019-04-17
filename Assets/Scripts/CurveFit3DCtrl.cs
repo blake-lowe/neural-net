@@ -222,7 +222,7 @@ public class CurveFit3DCtrl : MonoBehaviour
             testOutputSets[i, 0] = functionEvaluate((float)testInputSets[i, 0]);
         }
 
-        NeuralNet net = new NeuralNet(1, 1, numHiddenLayers, hiddenLayerSize, testInputSets, testOutputSets);//create net with test sets filled
+        NeuralNet net = new NeuralNet(2, 1, numHiddenLayers, hiddenLayerSize, testInputSets, testOutputSets);//create net with test sets filled
         ga = new GeneticAlgorithm(net, populationSize, numParents, environmentalPressure, eliteFraction, numCrossoverPoints, mutationChance, tournamentSize);
         isGAInitialized = true;
         bestNet = (NeuralNet)ga.individuals[0];
