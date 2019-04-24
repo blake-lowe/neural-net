@@ -3455,8 +3455,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: configDone
+      - m_Target: {fileID: 1310855750}
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4212,7 +4212,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &771335703
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5907,7 +5907,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1033644309
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7345,6 +7345,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1310855751}
+  - component: {fileID: 1310855752}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -7365,6 +7366,78 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1310855752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1310855750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ac56ae2379a3a540a658ca497dd5a14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numHiddenLayers: 0
+  hiddenLayerSize: 0
+  populationSize: 0
+  numParents: 0
+  numCrossoverPoints: 0
+  mutationChance: 0
+  environmentalPressure: 0
+  eliteFraction: 0
+  tournamentSize: 0
+  isRunning: 0
+  isFitnessControl: 0
+  targetGeneration: 0
+  targetFitness: 0
+  numPoints: 0
+  numTestPoints: 0
+  function: 
+  bestNet:
+    numInputs: 0
+    numOutputs: 0
+    numHiddenLayers: 0
+    hiddenLayerSize: 0
+    learningRate: 0
+    layers: []
+    numTestSets: 0
+  visualNet: {fileID: 803727614}
+  vNetXArea: 1
+  vNetYArea: 1
+  configPanel: {fileID: 1033644308}
+  populationField: {fileID: 561109305}
+  numParentsField: {fileID: 642046428}
+  numCrossoverPointsField: {fileID: 2055656721}
+  mutationChanceField: {fileID: 845871422}
+  environmentalPressureField: {fileID: 1713209959}
+  eliteFractionField: {fileID: 758920922}
+  tournamentSizeField: {fileID: 2141326879}
+  numHiddenLayersField: {fileID: 11797295}
+  hiddenLayerSizeField: {fileID: 277524015}
+  numPointsField: {fileID: 1739095384}
+  numTestPointsField: {fileID: 284869162}
+  functionDropdown: {fileID: 1798031389}
+  functionContent: {fileID: 615040197}
+  fitnessContent: {fileID: 1383995946}
+  configDoneButton: {fileID: 683405450}
+  configCloseButton: {fileID: 1165457203}
+  HUDContainer: {fileID: 771335702}
+  directoryField: {fileID: 236455917}
+  filenameField: {fileID: 691699321}
+  pauseButton: {fileID: 507541560}
+  runButton: {fileID: 1032762283}
+  subtractToggle: {fileID: 200292371}
+  currentGenerationContent: {fileID: 437176833}
+  generationControlButton: {fileID: 1330497790}
+  fitnessControlButton: {fileID: 778864714}
+  targetGenerationField: {fileID: 1952997771}
+  targetFitnessField: {fileID: 1186628208}
+  functionsOrigin: {x: 0, y: 0, z: 0}
+  functionsScale: 0
+  NNInputField: {fileID: 1361122985}
+  NNOutputContent: {fileID: 1513674685}
+  fitnessHistoryOrigin: {x: 0, y: 0}
+  fitnessHistoryScale: {x: 1, y: 1}
 --- !u!1 &1314437246
 GameObject:
   m_ObjectHideFlags: 0
