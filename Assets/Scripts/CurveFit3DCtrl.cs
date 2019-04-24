@@ -82,10 +82,12 @@ public class CurveFit3DCtrl : MonoBehaviour
     public InputField targetGenerationField;
     public InputField targetFitnessField;
 
-    private VectorLine targetFunctionLine;
-    private VectorLine NNFunctionLine;
-    public Vector2 functionsOrigin;
-    public Vector2 functionsScale;
+    private VectorLine[] targetFunctionLinesX;
+    private VectorLine[] targetFunctionLinesY;
+    private VectorLine[] NNFunctionLinesX;
+    private VectorLine[] NNFunctionLinesY;
+    public Vector3 functionsOrigin;
+    public float functionsScale;
 
     public InputField NNInputField;
     public Text NNOutputContent;
@@ -214,8 +216,8 @@ public class CurveFit3DCtrl : MonoBehaviour
         functionContent.text = function;
 
         //generate test inputs and outputs from correct function and based on numTestPoints
-        testInputSets = new double[numTestPoints, 1];
-        testOutputSets = new double[numTestPoints, 1];
+        testInputSets = new double[numTestPoints * numTestPoints, 2];
+        testOutputSets = new double[numTestPoints * numTestPoints, 1];
         for (int i = 0; i <= numTestPoints - 1; i++)//x from 0 to 1
         {
             for (int j = 0; j <= numTestPoints - 1; j++)//y from 0 to one
@@ -224,9 +226,10 @@ public class CurveFit3DCtrl : MonoBehaviour
                 float y = (float)j / (float)(numTestPoints - 1f);
                 float z = functionEvaluate(x, y);
                 //assign to testSets
+                testInputSets[i*numTestPoints + j, 0] = x;
+                testInputSets[i * numTestPoints + j, 1] = y;
+                testOutputSets[i * numTestPoints + j, 0] = z;
             }
-            testInputSets[i, 0] = (float)i / (float)(numTestPoints - 1f);
-            testOutputSets[i, 0] = functionEvaluate((float)testInputSets[i, 0]);
         }
 
         NeuralNet net = new NeuralNet(2, 1, numHiddenLayers, hiddenLayerSize, testInputSets, testOutputSets);//create net with test sets filled
@@ -238,8 +241,18 @@ public class CurveFit3DCtrl : MonoBehaviour
         visualNet.nodeSeparation = vNetYArea / (hiddenLayerSize + 1);
         visualNet.Initialize();
 
-        targetFunctionLine = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
-        NNFunctionLine = new VectorLine("NNFunctionLine", new List<Vector2>(), 2.0f, LineType.Points);
+        targetFunctionLinesX = new VectorLine[numPoints];
+        targetFunctionLinesY = new VectorLine[numPoints];
+        NNFunctionLinesX = new VectorLine[numPoints];
+        NNFunctionLinesY = new VectorLine[numPoints];
+        for (int i = 0; i < numPoints; i++)
+        {
+            targetFunctionLinesX[i] = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
+            targetFunctionLinesY[i] = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
+            NNFunctionLinesX[i] = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
+            NNFunctionLinesY[i] = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
+        }
+
         fitnessHistoryLine = new VectorLine("fitnessHistoryLine", new List<Vector2>(), 2.0f, LineType.Continuous);
         VectorLine fitHistAxesLine = new VectorLine("fitHistAxesLine", new List<Vector2>(), 2.0f, LineType.Continuous);
         fitHistAxesLine.points2.Add(new Vector2(495, 230));
@@ -257,29 +270,57 @@ public class CurveFit3DCtrl : MonoBehaviour
 
     public void drawTargetFunction()
     {
-        for (int i = 0; i <= numPoints - 1; i++)//TODO Fix
+        for (int i = 0; i <= numTestPoints - 1; i++)//x from 0 to 1
         {
-            float newPointX = ((float)i / (float)(numPoints - 1f));
-            float newPointY = functionEvaluate(newPointX);
-            targetFunctionLine.points2.Add(new Vector2(functionsOrigin.x + newPointX * functionsScale.x, functionsOrigin.y + newPointY * functionsScale.y));
+            for (int j = 0; j <= numTestPoints - 1; j++)//y from 0 to one
+            {
+                float x = (float)i / (float)(numTestPoints - 1f);
+                float y = (float)j / (float)(numTestPoints - 1f);
+                float z = functionEvaluate(x, y);
+                //add to lines
+                targetFunctionLinesX[i].points3.Add(new Vector3(functionsOrigin.x + x * functionsScale, functionsOrigin.z + z * functionsScale, functionsOrigin.y + y * functionsScale));//bc y is up in unity
+                targetFunctionLinesY[j].points3.Add(new Vector3(functionsOrigin.x + x * functionsScale, functionsOrigin.z + z * functionsScale, functionsOrigin.y + y * functionsScale));//bc y is up in unity
+            }
         }
-
-        targetFunctionLine.Draw();
-        targetFunctionLine.SetColor(Color.blue);
-    }
-
-    public void drawNNFunction()//TODO Fix
-    {
-        NNFunctionLine.points2.Clear();
         for (int i = 0; i < numPoints; i++)
         {
-            float newPointX = ((float)i / (float)(numPoints - 1));
-            float newPointY = (float)bestNet.FeedForward(new double[] { newPointX })[0];
-            NNFunctionLine.points2.Add(new Vector2(functionsOrigin.x + newPointX * functionsScale.x, functionsOrigin.y + newPointY * functionsScale.y));
+            targetFunctionLinesX[i].Draw();
+            targetFunctionLinesX[i].SetColor(Color.blue);
+            targetFunctionLinesY[i].Draw();
+            targetFunctionLinesY[i].SetColor(Color.blue);
+        }
+            
+    }
+
+    public void drawNNFunction()
+    {
+        for (int i = 0; i < numPoints; i++)
+        {
+            NNFunctionLinesX[i].points3.Clear();
+            NNFunctionLinesY[i].points3.Clear();
         }
 
-        NNFunctionLine.Draw();
-        NNFunctionLine.SetColor(Color.red);
+
+        for (int i = 0; i <= numTestPoints - 1; i++)//x from 0 to 1
+        {
+            for (int j = 0; j <= numTestPoints - 1; j++)//y from 0 to one
+            {
+                float x = (float)i / (float)(numTestPoints - 1f);
+                float y = (float)j / (float)(numTestPoints - 1f);
+                float z = (float)bestNet.FeedForward(new double[] { x, y })[0];
+                //add to lines
+                NNFunctionLinesX[i].points3.Add(new Vector3(functionsOrigin.x + x * functionsScale, functionsOrigin.z + z * functionsScale, functionsOrigin.y + y * functionsScale));//out of order bc y is up in unity
+                NNFunctionLinesY[j].points3.Add(new Vector3(functionsOrigin.x + x * functionsScale, functionsOrigin.z + z * functionsScale, functionsOrigin.y + y * functionsScale));//out of order bc y is up in unity
+            }
+        }
+
+        for (int i = 0; i < numPoints; i++)
+        {
+            NNFunctionLinesX[i].Draw();
+            NNFunctionLinesX[i].SetColor(Color.red);
+            NNFunctionLinesY[i].Draw();
+            NNFunctionLinesY[i].SetColor(Color.red);
+        }
 
         updateNNOutput();
     }
