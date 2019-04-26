@@ -89,7 +89,8 @@ public class CurveFit3DCtrl : MonoBehaviour
     public Vector3 functionsOrigin;
     public float functionsScale;
 
-    public InputField NNInputField;
+    public InputField NNInputFieldX;
+    public InputField NNInputFieldY;
     public Text NNOutputContent;
 
     private VectorLine fitnessHistoryLine;
@@ -247,10 +248,10 @@ public class CurveFit3DCtrl : MonoBehaviour
         NNFunctionLinesY = new VectorLine[numPoints];
         for (int i = 0; i < numPoints; i++)
         {
-            targetFunctionLinesX[i] = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
-            targetFunctionLinesY[i] = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
-            NNFunctionLinesX[i] = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
-            NNFunctionLinesY[i] = new VectorLine("targetFunctionLine", new List<Vector2>(), 2.0f, LineType.Continuous);
+            targetFunctionLinesX[i] = new VectorLine("targetFunctionLine", new List<Vector3>(), 2.0f, LineType.Continuous);
+            targetFunctionLinesY[i] = new VectorLine("targetFunctionLine", new List<Vector3>(), 2.0f, LineType.Continuous);
+            NNFunctionLinesX[i] = new VectorLine("targetFunctionLine", new List<Vector3>(), 2.0f, LineType.Continuous);
+            NNFunctionLinesY[i] = new VectorLine("targetFunctionLine", new List<Vector3>(), 2.0f, LineType.Continuous);
         }
 
         fitnessHistoryLine = new VectorLine("fitnessHistoryLine", new List<Vector2>(), 2.0f, LineType.Continuous);
@@ -264,7 +265,8 @@ public class CurveFit3DCtrl : MonoBehaviour
         drawFitnessHistory();
         fitHistAxesLine.Draw();
 
-        NNInputField.text = "0";
+        NNInputFieldX.text = "0";
+        NNInputFieldY.text = "0";
         updateNNOutput();
     }
 
@@ -477,17 +479,26 @@ public class CurveFit3DCtrl : MonoBehaviour
 
     public void updateNNOutput()
     {
-        float input;
-        if (float.TryParse(NNInputField.text, out input))
+        float inputX, inputY;
+        if (float.TryParse(NNInputFieldX.text, out inputX))
         {
-            input = float.Parse(NNInputField.text);
+            inputX = float.Parse(NNInputFieldX.text);
         }
         else
         {
-            NNInputField.text = "0";
-            input = 0;
+            NNInputFieldX.text = "0";
+            inputX = 0;
         }
-        float output = (float)bestNet.FeedForward(new double[] { input })[0];
+        if (float.TryParse(NNInputFieldY.text, out inputY))
+        {
+            inputY = float.Parse(NNInputFieldY.text);
+        }
+        else
+        {
+            NNInputFieldY.text = "0";
+            inputY = 0;
+        }
+        float output = (float)bestNet.FeedForward(new double[] { inputX, inputY })[0];
         NNOutputContent.text = output.ToString();
     }
 }
