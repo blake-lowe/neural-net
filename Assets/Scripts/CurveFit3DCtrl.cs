@@ -248,10 +248,15 @@ public class CurveFit3DCtrl : MonoBehaviour
         NNFunctionLinesY = new VectorLine[numPoints];
         for (int i = 0; i < numPoints; i++)
         {
-            targetFunctionLinesX[i] = new VectorLine("targetFunctionLine", new List<Vector3>(), 2.0f, LineType.Continuous);
-            targetFunctionLinesY[i] = new VectorLine("targetFunctionLine", new List<Vector3>(), 2.0f, LineType.Continuous);
-            NNFunctionLinesX[i] = new VectorLine("targetFunctionLine", new List<Vector3>(), 2.0f, LineType.Continuous);
-            NNFunctionLinesY[i] = new VectorLine("targetFunctionLine", new List<Vector3>(), 2.0f, LineType.Continuous);
+            targetFunctionLinesX[i] = new VectorLine("targetFunctionLineX" + i.ToString(), new List<Vector3>(), 2.0f, LineType.Continuous);
+            //targetFunctionLinesX[i]
+            targetFunctionLinesY[i] = new VectorLine("targetFunctionLineY" + i.ToString(), new List<Vector3>(), 2.0f, LineType.Continuous);
+
+        }
+        for (int i = 0; i < numTestPoints; i++)
+        {
+            NNFunctionLinesX[i] = new VectorLine("NNFunctionLineX" + i.ToString(), new List<Vector3>(), 2.0f, LineType.Continuous);
+            NNFunctionLinesY[i] = new VectorLine("NNFunctionLineY" + i.ToString(), new List<Vector3>(), 2.0f, LineType.Continuous);
         }
 
         fitnessHistoryLine = new VectorLine("fitnessHistoryLine", new List<Vector2>(), 2.0f, LineType.Continuous);
@@ -286,9 +291,9 @@ public class CurveFit3DCtrl : MonoBehaviour
         }
         for (int i = 0; i < numPoints; i++)
         {
-            targetFunctionLinesX[i].Draw();
+            targetFunctionLinesX[i].Draw3D();
             targetFunctionLinesX[i].SetColor(Color.blue);
-            targetFunctionLinesY[i].Draw();
+            targetFunctionLinesY[i].Draw3D();
             targetFunctionLinesY[i].SetColor(Color.blue);
         }
             
@@ -296,7 +301,7 @@ public class CurveFit3DCtrl : MonoBehaviour
 
     public void drawNNFunction()
     {
-        for (int i = 0; i < numPoints; i++)
+        for (int i = 0; i < numTestPoints; i++)
         {
             NNFunctionLinesX[i].points3.Clear();
             NNFunctionLinesY[i].points3.Clear();
@@ -316,11 +321,11 @@ public class CurveFit3DCtrl : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < numPoints; i++)
+        for (int i = 0; i < numTestPoints; i++)
         {
-            NNFunctionLinesX[i].Draw();
+            NNFunctionLinesX[i].Draw3D();
             NNFunctionLinesX[i].SetColor(Color.red);
-            NNFunctionLinesY[i].Draw();
+            NNFunctionLinesY[i].Draw3D();
             NNFunctionLinesY[i].SetColor(Color.red);
         }
 

@@ -4600,7 +4600,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &771335703
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6298,7 +6298,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1033644309
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7824,7 +7824,7 @@ MonoBehaviour:
   targetGenerationField: {fileID: 1952997771}
   targetFitnessField: {fileID: 1186628208}
   functionsOrigin: {x: 0, y: 0, z: 0}
-  functionsScale: 1
+  functionsScale: 10
   NNInputFieldX: {fileID: 1361122985}
   NNInputFieldY: {fileID: 59903124}
   NNOutputContent: {fileID: 1513674685}
