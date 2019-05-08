@@ -100,6 +100,8 @@ public class CurveFit3DCtrl : MonoBehaviour
 
     private List<float> fitnessRecord = new List<float>();
 
+    public Transform FunctionLinesPivot;
+
 
     // Use this for initialization
     void Start()
@@ -307,8 +309,10 @@ public class CurveFit3DCtrl : MonoBehaviour
         {
             targetFunctionLinesX[i].Draw3DAuto();
             targetFunctionLinesX[i].SetColor(Color.blue);
+            targetFunctionLinesX[i].drawTransform = FunctionLinesPivot;
             targetFunctionLinesY[i].Draw3DAuto();
             targetFunctionLinesY[i].SetColor(Color.blue);
+            targetFunctionLinesY[i].drawTransform = FunctionLinesPivot;
         }
             
     }
@@ -350,8 +354,10 @@ public class CurveFit3DCtrl : MonoBehaviour
         {
             NNFunctionLinesX[i].Draw3DAuto();
             NNFunctionLinesX[i].SetColor(Color.red);
+            NNFunctionLinesX[i].drawTransform = FunctionLinesPivot;
             NNFunctionLinesY[i].Draw3DAuto();
             NNFunctionLinesY[i].SetColor(Color.red);
+            NNFunctionLinesY[i].drawTransform = FunctionLinesPivot;
         }
 
         updateNNOutput();
