@@ -101,6 +101,7 @@ public class CurveFit3DCtrl : MonoBehaviour
     private List<float> fitnessRecord = new List<float>();
 
     public Transform FunctionLinesPivot;
+    public Vector2 rotationStep;//in degrees
 
 
     // Use this for initialization
@@ -536,5 +537,25 @@ public class CurveFit3DCtrl : MonoBehaviour
         }
         float output = (float)bestNet.FeedForward(new double[] { inputX, inputY })[0];
         NNOutputContent.text = output.ToString();
+    }
+
+    public void XAxisIncrease()
+    {
+        FunctionLinesPivot.transform.Rotate(new Vector3(0, 0, rotationStep.x));
+    }
+
+    public void XAxisDecrease()
+    {
+        FunctionLinesPivot.transform.Rotate(new Vector3(0, 0, -rotationStep.x));
+    }
+
+    public void YAxisIncrease()
+    {
+        FunctionLinesPivot.transform.Rotate(new Vector3(0, -rotationStep.y, 0));
+    }
+
+    public void YAxisDecrease()
+    {
+        FunctionLinesPivot.transform.Rotate(new Vector3(0, rotationStep.y, 0));
     }
 }
