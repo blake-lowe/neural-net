@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CurveFitRelease/2DCurveFit.unity
     guid: 45f84bb3c2b5c074db4427f7cae61e6e
+  - enabled: 1
+    path: Assets/Scenes/CurveFitRelease/3DCurveFit.unity
+    guid: f194b8cd67d10924cad661691e94d123
   m_configObjects: {}

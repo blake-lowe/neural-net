@@ -260,8 +260,8 @@ public class CurveFit3DCtrl : MonoBehaviour
             NNFunctionLinesY[i] = new VectorLine("NNFunctionLineY" + i.ToString(), new List<Vector3>(), 3.0f, LineType.Continuous);
         }
 
-        fitnessHistoryLine = new VectorLine("fitnessHistoryLine", new List<Vector2>(), 4.0f, LineType.Continuous);
-        VectorLine fitHistAxesLine = new VectorLine("fitHistAxesLine", new List<Vector2>(), 4.0f, LineType.Continuous);
+        fitnessHistoryLine = new VectorLine("fitnessHistoryLine", new List<Vector2>(), 2.0f, LineType.Continuous);
+        VectorLine fitHistAxesLine = new VectorLine("fitHistAxesLine", new List<Vector2>(), 2.0f, LineType.Continuous);
         fitHistAxesLine.points2.Add(new Vector2(495, 230));
         fitHistAxesLine.points2.Add(new Vector2(495, 25));
         fitHistAxesLine.points2.Add(new Vector2(900, 25));
